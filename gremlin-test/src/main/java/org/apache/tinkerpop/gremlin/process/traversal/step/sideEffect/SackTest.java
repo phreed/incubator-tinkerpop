@@ -22,6 +22,7 @@ import org.apache.tinkerpop.gremlin.LoadGraphWith;
 import org.apache.tinkerpop.gremlin.process.AbstractGremlinProcessTest;
 import org.apache.tinkerpop.gremlin.process.GremlinProcessRunner;
 import org.apache.tinkerpop.gremlin.process.traversal.Operator;
+import org.apache.tinkerpop.gremlin.process.traversal.P;
 import org.apache.tinkerpop.gremlin.process.traversal.SackFunctions;
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
@@ -31,14 +32,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.apache.tinkerpop.gremlin.LoadGraphWith.GraphData.MODERN;
-import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.outE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.*;
+import static org.junit.Assert.*;
 
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
@@ -63,6 +63,8 @@ public abstract class SackTest extends AbstractGremlinProcessTest {
     public abstract Traversal<Vertex, Double> get_g_withSackX1_sumX_VX1X_localXoutXknowsX_barrierXnormSackXX_inXknowsX_barrier_sack(final Object v1Id);
 
     public abstract Traversal<Vertex, Integer> get_g_withBulkXfalseX_withSackX1_sumX_V_out_barrier_sack();
+
+    public abstract Traversal<Vertex, Vertex> get_g_withBulkXfalseX_withSackX1_sumX_VX1X_unionXoutXknowsX_outXcreatedX_sackXmultX_byXconstantX1XX__outXcreatedXX_barrier_whereXsack_isXneqX0XXX(final Object v1Id);
 
     @Test
     @LoadGraphWith(MODERN)
@@ -139,6 +141,14 @@ public abstract class SackTest extends AbstractGremlinProcessTest {
         checkResults(Arrays.asList(1, 1, 1, 3), traversal); // josh, vadas, ripple, lop
     }
 
+    @Test
+    @LoadGraphWith(MODERN)
+    public void g_withBulkXfalseX_withSackX1_sumX_VX1X_unionXoutXknowsX_outXcreatedX_sackXmultX_byXconstantX1XX__outXcreatedXX_barrier_whereXsack_isXneqX0XXX() {
+        final Traversal<Vertex, Vertex> traversal = get_g_withBulkXfalseX_withSackX1_sumX_VX1X_unionXoutXknowsX_outXcreatedX_sackXmultX_byXconstantX1XX__outXcreatedXX_barrier_whereXsack_isXneqX0XXX(convertToVertexId(graph, "marko"));
+        printTraversalForm(traversal);
+        checkResults(Collections.singletonList(convertToVertex(graph, "ripple")), traversal);
+    }
+
     public static class Traversals extends SackTest {
 
         @Override
@@ -182,6 +192,11 @@ public abstract class SackTest extends AbstractGremlinProcessTest {
         @Override
         public Traversal<Vertex, Integer> get_g_withBulkXfalseX_withSackX1_sumX_V_out_barrier_sack() {
             return g.withBulk(false).withSack(1, Operator.sum).V().out().barrier().sack();
+        }
+
+        @Override
+        public Traversal<Vertex, Vertex> get_g_withBulkXfalseX_withSackX1_sumX_VX1X_unionXoutXknowsX_outXcreatedX_sackXmultX_byXconstantX1XX__outXcreatedXX_barrier_whereXsack_isXneqX0XXX(final Object v1Id) {
+            return g.withBulk(false).withSack(1, Operator.sum).V(v1Id).union(out("knows").out("created").sack(Operator.mult).by(constant(-1)), out("created")).barrier().where(sack().is(P.neq(0)));
         }
     }
 }
