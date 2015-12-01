@@ -22,7 +22,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategies;
 import org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategy;
 import org.apache.tinkerpop.gremlin.process.traversal.traverser.TraverserGeneratorFactory;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.util.DefaultTraverserGeneratorFactory;
+import org.apache.tinkerpop.gremlin.process.traversal.traverser.DefaultTraverserGeneratorFactory;
 
 import java.util.Collections;
 import java.util.List;

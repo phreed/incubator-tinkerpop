@@ -24,14 +24,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.Contains;
 import org.apache.tinkerpop.gremlin.process.traversal.Path;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.BulkSet;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.Tree;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.B_LP_O_P_S_SE_SL_Traverser;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.B_LP_O_S_SE_SL_Traverser;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.B_O_S_SE_SL_Traverser;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.B_O_Traverser;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.LP_O_OB_P_S_SE_SL_TraverserGenerator;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.LP_O_OB_S_SE_SL_Traverser;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.O_OB_S_SE_SL_Traverser;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.O_Traverser;
+import org.apache.tinkerpop.gremlin.process.traversal.traverser.DefaultTraverser;
 import org.apache.tinkerpop.gremlin.process.traversal.traverser.util.TraverserSet;
 import org.apache.tinkerpop.gremlin.process.traversal.util.DependantMutableMetrics;
 import org.apache.tinkerpop.gremlin.process.traversal.util.MutableMetrics;
@@ -228,7 +221,7 @@ public final class GryoMapper implements Mapper<Kryo> {
             add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(EnumSet.class, null, 46));
             add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(HashMap.class, null, 11));
             add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(HashMap.Entry.class, null, 16));
-            add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(HASH_MAP_NODE, null, 92));   // ***LAST ID**
+            add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(HASH_MAP_NODE, null, 92));
             add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(KryoSerializable.class, null, 36));
             add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(LinkedHashMap.class, null, 47));
             add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(LinkedHashSet.class, null, 71));
@@ -258,14 +251,8 @@ public final class GryoMapper implements Mapper<Kryo> {
             add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(VertexProperty.class, kryo -> new GryoSerializers.VertexPropertySerializer(), 68));
             add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(Path.class, kryo -> new GryoSerializers.PathSerializer(), 59));
             // skip 55
-            add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(B_O_Traverser.class, null, 75));
-            add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(O_Traverser.class, null, 76));
-            add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(B_LP_O_P_S_SE_SL_Traverser.class, null, 77));
-            add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(B_O_S_SE_SL_Traverser.class, null, 78));
-            add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(B_LP_O_S_SE_SL_Traverser.class, null, 87));
-            add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(O_OB_S_SE_SL_Traverser.class, null, 89));
-            add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(LP_O_OB_S_SE_SL_Traverser.class, null, 90));
-            add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(LP_O_OB_P_S_SE_SL_TraverserGenerator.class, null, 91));
+            // skip 75, 76, 77, 78, 87, 89, 90, 91 (old traverser species)
+            add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(DefaultTraverser.class, null, 93)); // ***LAST ID**
 
             add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(TraverserSet.class, null, 58));
             add(Triplet.<Class, Function<Kryo, Serializer>, Integer>with(Tree.class, null, 61));

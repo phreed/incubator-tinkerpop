@@ -16,27 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.tinkerpop.gremlin.process.traversal.traverser.util;
+package org.apache.tinkerpop.gremlin.process.traversal.traverser;
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.TraverserGenerator;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.B_LP_O_P_S_SE_SL_TraverserGenerator;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.B_LP_O_S_SE_SL_TraverserGenerator;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.B_O_S_SE_SL_TraverserGenerator;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.B_O_TraverserGenerator;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.LP_O_OB_P_S_SE_SL_TraverserGenerator;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.LP_O_OB_S_SE_SL_TraverserGenerator;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.O_OB_S_SE_SL_TraverserGenerator;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.O_TraverserGenerator;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.TraverserGeneratorFactory;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.TraverserRequirement;
 
 import java.util.Set;
 
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
  */
-public class DefaultTraverserGeneratorFactory implements TraverserGeneratorFactory {
+public final class DefaultTraverserGeneratorFactory implements TraverserGeneratorFactory {
 
     private static DefaultTraverserGeneratorFactory INSTANCE = new DefaultTraverserGeneratorFactory();
 
@@ -51,7 +41,8 @@ public class DefaultTraverserGeneratorFactory implements TraverserGeneratorFacto
     public TraverserGenerator getTraverserGenerator(final Traversal.Admin<?, ?> traversal) {
         final Set<TraverserRequirement> requirements = traversal.getTraverserRequirements();
 
-        if (requirements.contains(TraverserRequirement.ONE_BULK)) {
+        return DefaultTraverserGenerator.instance();
+        /*if (requirements.contains(TraverserRequirement.ONE_BULK)) {
             if (O_OB_S_SE_SL_TraverserGenerator.instance().getProvidedRequirements().containsAll(requirements))
                 return O_OB_S_SE_SL_TraverserGenerator.instance();
 
@@ -75,8 +66,8 @@ public class DefaultTraverserGeneratorFactory implements TraverserGeneratorFacto
 
             if (B_LP_O_P_S_SE_SL_TraverserGenerator.instance().getProvidedRequirements().containsAll(requirements))
                 return B_LP_O_P_S_SE_SL_TraverserGenerator.instance();
-        }
+        }*/
 
-        throw new IllegalStateException("The provided traverser generator factory does not support the requirements of the traversal: " + this.getClass().getCanonicalName() + requirements);
+        //throw new IllegalStateException("The provided traverser generator factory does not support the requirements of the traversal: " + this.getClass().getCanonicalName() + requirements);
     }
 }

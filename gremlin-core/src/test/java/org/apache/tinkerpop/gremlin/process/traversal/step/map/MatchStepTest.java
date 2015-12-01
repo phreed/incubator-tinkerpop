@@ -29,8 +29,9 @@ import org.apache.tinkerpop.gremlin.process.traversal.step.filter.ConnectiveStep
 import org.apache.tinkerpop.gremlin.process.traversal.step.filter.WherePredicateStep;
 import org.apache.tinkerpop.gremlin.process.traversal.step.filter.WhereTraversalStep;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.EmptyStep;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.B_LP_O_P_S_SE_SL_TraverserGenerator;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.util.EmptyTraverser;
+import org.apache.tinkerpop.gremlin.process.traversal.step.util.ImmutablePath;
+import org.apache.tinkerpop.gremlin.process.traversal.traverser.DefaultTraverser;
+import org.apache.tinkerpop.gremlin.process.traversal.traverser.EmptyTraverser;
 import org.apache.tinkerpop.gremlin.structure.T;
 import org.junit.Test;
 
@@ -361,7 +362,7 @@ public class MatchStepTest extends StepTest {
         countMatchAlgorithm.recordEnd(EmptyTraverser.instance(), forthPattern);
         countMatchAlgorithm.recordEnd(EmptyTraverser.instance(), forthPattern);
         //
-        Traverser.Admin traverser = B_LP_O_P_S_SE_SL_TraverserGenerator.instance().generate(1, EmptyStep.instance(), 1l);
+        Traverser.Admin traverser = new DefaultTraverser<>(1, EmptyStep.instance(), 1l, ImmutablePath.make().extend(1, Collections.emptySet()), false, false); // TODO: SHOULD WORK WITH ONLY LABELED PATHS
         traverser.addLabels(Collections.singleton("a"));
         assertEquals(firstPattern, countMatchAlgorithm.apply(traverser));
         traverser = traverser.split(1, EmptyStep.instance());

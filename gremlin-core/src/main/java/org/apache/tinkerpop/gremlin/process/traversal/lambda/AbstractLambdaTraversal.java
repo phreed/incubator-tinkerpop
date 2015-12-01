@@ -28,7 +28,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.TraverserGenerator;
 import org.apache.tinkerpop.gremlin.process.traversal.engine.StandardTraversalEngine;
 import org.apache.tinkerpop.gremlin.process.traversal.step.TraversalParent;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.EmptyStep;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.O_TraverserGenerator;
+import org.apache.tinkerpop.gremlin.process.traversal.traverser.DefaultTraverserGenerator;
 import org.apache.tinkerpop.gremlin.process.traversal.traverser.TraverserRequirement;
 import org.apache.tinkerpop.gremlin.process.traversal.util.EmptyTraversalSideEffects;
 import org.apache.tinkerpop.gremlin.process.traversal.util.EmptyTraversalStrategies;
@@ -37,7 +37,6 @@ import org.apache.tinkerpop.gremlin.structure.Graph;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
@@ -79,7 +78,7 @@ public abstract class AbstractLambdaTraversal<S, E> implements Traversal.Admin<S
 
     @Override
     public TraverserGenerator getTraverserGenerator() {
-        return O_TraverserGenerator.instance();
+        return DefaultTraverserGenerator.instance();
     }
 
     @Override

@@ -16,40 +16,46 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.apache.tinkerpop.gremlin.process.traversal.traverser;
 
 import org.apache.tinkerpop.gremlin.process.traversal.Step;
 import org.apache.tinkerpop.gremlin.process.traversal.Traverser;
 import org.apache.tinkerpop.gremlin.process.traversal.TraverserGenerator;
+import org.apache.tinkerpop.gremlin.process.traversal.step.util.EmptyPath;
+import org.apache.tinkerpop.gremlin.process.traversal.step.util.ImmutablePath;
+import org.apache.tinkerpop.gremlin.process.traversal.util.TraversalHelper;
 
-import java.util.EnumSet;
+import java.util.Collections;
 import java.util.Set;
 
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
  */
-public final class B_O_TraverserGenerator implements TraverserGenerator {
+public final class DefaultTraverserGenerator implements TraverserGenerator {
 
-    private static final Set<TraverserRequirement> REQUIREMENTS = EnumSet.of(
-            TraverserRequirement.BULK,
-            TraverserRequirement.OBJECT);
+    private static final DefaultTraverserGenerator INSTANCE = new DefaultTraverserGenerator();
 
-    private static final B_O_TraverserGenerator INSTANCE = new B_O_TraverserGenerator();
-
-    private B_O_TraverserGenerator() {
+    private DefaultTraverserGenerator() {
     }
 
     @Override
     public <S> Traverser.Admin<S> generate(final S start, final Step<S, ?> startStep, final long initialBulk) {
-        return new B_O_Traverser<>(start, initialBulk);
+        final Set<TraverserRequirement> requirements = TraversalHelper.getRootTraversal(startStep.getTraversal()).getTraverserRequirements();
+        if (requirements.contains(TraverserRequirement.PATH))
+            return new DefaultTraverser<>(start, startStep, initialBulk, ImmutablePath.make().extend(start, startStep.getLabels()), false, requirements.contains(TraverserRequirement.ONE_BULK));
+        else if (requirements.contains(TraverserRequirement.LABELED_PATH))
+            return new DefaultTraverser<>(start, startStep, initialBulk, ImmutablePath.make().extend(start, startStep.getLabels()), true, requirements.contains(TraverserRequirement.ONE_BULK));
+        else
+            return new DefaultTraverser<>(start, startStep, initialBulk, EmptyPath.instance(), true, requirements.contains(TraverserRequirement.ONE_BULK));
     }
 
     @Override
     public Set<TraverserRequirement> getProvidedRequirements() {
-        return REQUIREMENTS;
+        return Collections.emptySet();
     }
 
-    public static B_O_TraverserGenerator instance() {
+    public static DefaultTraverserGenerator instance() {
         return INSTANCE;
     }
 }
