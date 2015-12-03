@@ -44,9 +44,6 @@ public final class DefaultTraverser<T> implements Traverser.Admin<T> {
     private Object sack;
     private Path path;
     private transient TraversalSideEffects sideEffects;
-    ///
-    private boolean onlyLabeledPaths; // we need to get rid of this
-
 
     /**
      * A no-args constructor  is necessary for Kryo serialization.
@@ -55,29 +52,19 @@ public final class DefaultTraverser<T> implements Traverser.Admin<T> {
 
     }
 
-    public DefaultTraverser(final T t, final Step<T, ?> step, final long initialBulk, final Path path, boolean onlyLabeledPaths) {
+    public DefaultTraverser(final T t, final Step<T, ?> step, final long initialBulk, final Path path) {
         this.t = t;
         this.stepId = step.getId();
         this.bulk = initialBulk;
-        this.path = path instanceof EmptyPath ? null : path;
+        this.path = path instanceof EmptyPath ? null : path.extend(this.t, step.getLabels());
         this.sideEffects = step.getTraversal().getSideEffects();
-        this.onlyLabeledPaths = onlyLabeledPaths;
         if (null != this.sideEffects.getSackInitialValue())
             this.sack = this.sideEffects.getSackInitialValue().get();
     }
 
-
     @Override
-    public void addLabels(final Set<String> labels) {  // we need to get rid of this too
-        if (null != this.path) {
-            if (this.onlyLabeledPaths) {
-                if (!labels.isEmpty())
-                    this.path = this.path.size() == 0 || !this.path.get(this.path.size() - 1).equals(this.t) ?
-                            this.path.extend(this.t, labels) :
-                            this.path.extend(labels);
-            } else
-                this.path = this.path.extend(labels);
-        }
+    public void setPath(final Path path) {
+        this.path = path instanceof EmptyPath ? null : path.clone();
     }
 
     @Override
@@ -145,13 +132,8 @@ public final class DefaultTraverser<T> implements Traverser.Admin<T> {
     public <R> Admin<R> split(final R r, final Step<T, R> step) {
         final DefaultTraverser<R> clone = (DefaultTraverser<R>) this.clone();
         clone.t = r;
-        if (null != this.path) {
-            if (this.onlyLabeledPaths) {
-                if (!step.getLabels().isEmpty())
-                    clone.path = clone.path.extend(r, step.getLabels());
-            } else
-                clone.path = clone.path.extend(r, step.getLabels());
-        }
+        if (null != this.path)
+            clone.path = clone.path.extend(r, step.getLabels());
         return clone;
     }
 

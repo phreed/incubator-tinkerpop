@@ -181,7 +181,7 @@ public interface Traverser<T> extends Serializable, Comparable<Traverser<T>>, Cl
          */
         public Admin<T> split();
 
-        public void addLabels(final Set<String> labels);
+        public void setPath(final Path path);
 
         /**
          * Set the current object location of the traverser.

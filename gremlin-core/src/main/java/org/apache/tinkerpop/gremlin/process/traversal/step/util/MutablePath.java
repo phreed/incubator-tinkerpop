@@ -24,6 +24,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.Pop;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -36,6 +37,8 @@ public class MutablePath implements Path, Serializable {
 
     protected final List<Object> objects;
     protected final List<Set<String>> labels;
+    protected boolean fullPath = true;
+    public Object currentObject;
 
     protected MutablePath() {
         this(10);
@@ -50,6 +53,12 @@ public class MutablePath implements Path, Serializable {
         return new MutablePath();
     }
 
+    public static Path make(final boolean fullPath) {
+        final MutablePath path = new MutablePath();
+        path.fullPath = fullPath;
+        return path;
+    }
+
     @Override
     @SuppressWarnings("CloneDoesntCallSuperClone,CloneDoesntDeclareCloneNotSupportedException")
     public MutablePath clone() {
@@ -62,6 +71,8 @@ public class MutablePath implements Path, Serializable {
         for (final Set<String> labels : this.labels) {
             clone.labels.add(new LinkedHashSet<>(labels));
         }
+        clone.fullPath = this.fullPath;
+        clone.currentObject = this.currentObject;
         return clone;
     }
 
@@ -73,14 +84,30 @@ public class MutablePath implements Path, Serializable {
 
     @Override
     public Path extend(final Object object, final Set<String> labels) {
-        this.objects.add(object);
-        this.labels.add(new LinkedHashSet<>(labels));
+        if (this.fullPath || (!labels.isEmpty() && !object.equals(this.currentObject))) {
+            this.objects.add(object);
+            this.labels.add(new LinkedHashSet<>(labels));
+        }
+        this.currentObject = object;
         return this;
     }
 
     @Override
     public Path extend(final Set<String> labels) {
-        this.labels.get(this.labels.size() - 1).addAll(labels);
+        if (this.fullPath)
+            this.labels.get(this.labels.size() - 1).addAll(labels);
+        else if (!labels.isEmpty()) {
+            if (this.labels.isEmpty()) {
+                this.objects.add(this.currentObject);
+                this.labels.add(new HashSet<>(labels));
+            } else if (!this.objects.get(this.objects.size() - 1).equals(this.currentObject)) {
+                this.objects.add(this.currentObject);
+                this.labels.add(new HashSet<>(labels));
+            } else {
+                this.labels.get(this.labels.size() - 1).addAll(labels);
+            }
+
+        }
         return this;
     }
 

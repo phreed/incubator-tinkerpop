@@ -200,7 +200,7 @@ public abstract class AbstractStep<S, E> implements Step<S, E> {
     private final Traverser.Admin<E> prepareTraversalForNextStep(final Traverser.Admin<E> traverser) {
         if (!this.traverserStepIdAndLabelsSetByChild) {
             traverser.setStepId(this.nextStep.getId());
-            traverser.addLabels(this.labels);
+            traverser.setPath(traverser.path().extend(this.labels));
         }
         return traverser;
     }

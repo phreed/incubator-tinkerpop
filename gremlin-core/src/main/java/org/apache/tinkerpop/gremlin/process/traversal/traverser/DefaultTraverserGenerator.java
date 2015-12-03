@@ -24,6 +24,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.Traverser;
 import org.apache.tinkerpop.gremlin.process.traversal.TraverserGenerator;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.EmptyPath;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.ImmutablePath;
+import org.apache.tinkerpop.gremlin.process.traversal.step.util.MutablePath;
 import org.apache.tinkerpop.gremlin.process.traversal.util.TraversalHelper;
 
 import java.util.Collections;
@@ -43,11 +44,11 @@ public final class DefaultTraverserGenerator implements TraverserGenerator {
     public <S> Traverser.Admin<S> generate(final S start, final Step<S, ?> startStep, final long initialBulk) {
         final Set<TraverserRequirement> requirements = TraversalHelper.getRootTraversal(startStep.getTraversal()).getTraverserRequirements();
         if (requirements.contains(TraverserRequirement.PATH))
-            return new DefaultTraverser<>(start, startStep, requirements.contains(TraverserRequirement.ONE_BULK) ? Long.MIN_VALUE : initialBulk, ImmutablePath.make().extend(start, startStep.getLabels()), false);
+            return new DefaultTraverser<>(start, startStep, requirements.contains(TraverserRequirement.ONE_BULK) ? Long.MIN_VALUE : initialBulk, MutablePath.make(true));
         else if (requirements.contains(TraverserRequirement.LABELED_PATH))
-            return new DefaultTraverser<>(start, startStep, requirements.contains(TraverserRequirement.ONE_BULK) ? Long.MIN_VALUE : initialBulk, ImmutablePath.make().extend(start, startStep.getLabels()), true);
+            return new DefaultTraverser<>(start, startStep, requirements.contains(TraverserRequirement.ONE_BULK) ? Long.MIN_VALUE : initialBulk, MutablePath.make(false));
         else
-            return new DefaultTraverser<>(start, startStep, requirements.contains(TraverserRequirement.ONE_BULK) ? Long.MIN_VALUE : initialBulk, EmptyPath.instance(), true);
+            return new DefaultTraverser<>(start, startStep, requirements.contains(TraverserRequirement.ONE_BULK) ? Long.MIN_VALUE : initialBulk, EmptyPath.instance());
     }
 
     @Override

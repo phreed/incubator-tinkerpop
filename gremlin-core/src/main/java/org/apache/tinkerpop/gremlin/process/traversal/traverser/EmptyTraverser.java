@@ -45,7 +45,7 @@ public final class EmptyTraverser<T> implements Traverser<T>, Traverser.Admin<T>
     }
 
     @Override
-    public void addLabels(final Set<String> labels) {
+    public void setPath(final Path path) {
 
     }
 

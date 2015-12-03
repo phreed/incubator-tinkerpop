@@ -183,7 +183,7 @@ public final class RepeatStep<S> extends ComputerAwareStep<S, S> implements Trav
         if (doUntil(start, true)) {
             start.resetLoops();
             start.setStepId(this.getNextStep().getId());
-            start.addLabels(this.labels);
+            start.setPath(start.path().extend(this.labels));
             return IteratorUtils.of(start);
         } else {
             start.setStepId(this.repeatTraversal.getStartStep().getId());
@@ -275,7 +275,7 @@ public final class RepeatStep<S> extends ComputerAwareStep<S, S> implements Trav
             if (repeatStep.doUntil(start, false)) {
                 start.resetLoops();
                 start.setStepId(repeatStep.getNextStep().getId());
-                start.addLabels(repeatStep.labels);
+                start.setPath(start.path().extend(repeatStep.labels));
                 return IteratorUtils.of(start);
             } else {
                 start.setStepId(repeatStep.getId());

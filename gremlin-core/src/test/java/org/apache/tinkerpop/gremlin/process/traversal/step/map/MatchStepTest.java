@@ -362,32 +362,32 @@ public class MatchStepTest extends StepTest {
         countMatchAlgorithm.recordEnd(EmptyTraverser.instance(), forthPattern);
         countMatchAlgorithm.recordEnd(EmptyTraverser.instance(), forthPattern);
         //
-        Traverser.Admin traverser = new DefaultTraverser<>(1, EmptyStep.instance(), 1l, ImmutablePath.make().extend(1, Collections.emptySet()), false); // TODO: SHOULD WORK WITH ONLY LABELED PATHS
-        traverser.addLabels(Collections.singleton("a"));
+        Traverser.Admin traverser = new DefaultTraverser<>(1, EmptyStep.instance(), 1l, ImmutablePath.make().extend(1, Collections.emptySet())); // TODO: SHOULD WORK WITH ONLY LABELED PATHS
+        traverser.setPath(traverser.path().extend(Collections.singleton("a")));
         assertEquals(firstPattern, countMatchAlgorithm.apply(traverser));
         traverser = traverser.split(1, EmptyStep.instance());
         traverser.getTags().add(firstPattern.getStartStep().getId());
-        traverser.addLabels(Collections.singleton("b"));
+        traverser.setPath(traverser.path().extend(Collections.singleton("b")));
         //
         assertEquals(secondPattern, countMatchAlgorithm.apply(traverser));
         traverser = traverser.split(1, EmptyStep.instance());
         traverser.getTags().add(secondPattern.getStartStep().getId());
-        traverser.addLabels(Collections.singleton("c"));
+        traverser.setPath(traverser.path().extend(Collections.singleton("c")));
         //
         assertEquals(fifthPattern, countMatchAlgorithm.apply(traverser));
         traverser = traverser.split(1, EmptyStep.instance());
         traverser.getTags().add(fifthPattern.getStartStep().getId());
-        traverser.addLabels(Collections.singleton("f"));
+        traverser.setPath(traverser.path().extend(Collections.singleton("f")));
         //
         assertEquals(forthPattern, countMatchAlgorithm.apply(traverser));
         traverser = traverser.split(1, EmptyStep.instance());
         traverser.getTags().add(forthPattern.getStartStep().getId());
-        traverser.addLabels(Collections.singleton("e"));
+        traverser.setPath(traverser.path().extend(Collections.singleton("e")));
         //
         assertEquals(thirdPattern, countMatchAlgorithm.apply(traverser));
         traverser = traverser.split(1, EmptyStep.instance());
         traverser.getTags().add(thirdPattern.getStartStep().getId());
-        traverser.addLabels(Collections.singleton("d"));
+        traverser.setPath(traverser.path().extend(Collections.singleton("d")));
     }
 
     @Test
