@@ -162,7 +162,7 @@ public final class DefaultTraverser<T> implements Traverser.Admin<T> {
 
     @Override
     public void merge(final Traverser.Admin<?> other) {
-        if (-1 != this.bulk)
+        if (Long.MIN_VALUE != this.bulk)
             this.bulk = this.bulk + other.bulk();
         if (!other.getTags().isEmpty()) {
             if (this.tags == null) this.tags = new HashSet<>();
@@ -199,7 +199,7 @@ public final class DefaultTraverser<T> implements Traverser.Admin<T> {
 
     @Override
     public long bulk() {
-        return this.bulk == -1 ? 1 : this.bulk;
+        return this.bulk == Long.MIN_VALUE ? 1 : this.bulk;
     }
 
     @Override

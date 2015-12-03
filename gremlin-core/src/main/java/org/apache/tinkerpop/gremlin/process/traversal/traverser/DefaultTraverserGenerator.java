@@ -43,11 +43,11 @@ public final class DefaultTraverserGenerator implements TraverserGenerator {
     public <S> Traverser.Admin<S> generate(final S start, final Step<S, ?> startStep, final long initialBulk) {
         final Set<TraverserRequirement> requirements = TraversalHelper.getRootTraversal(startStep.getTraversal()).getTraverserRequirements();
         if (requirements.contains(TraverserRequirement.PATH))
-            return new DefaultTraverser<>(start, startStep, requirements.contains(TraverserRequirement.ONE_BULK) ? -1 : initialBulk, ImmutablePath.make().extend(start, startStep.getLabels()), false);
+            return new DefaultTraverser<>(start, startStep, requirements.contains(TraverserRequirement.ONE_BULK) ? Long.MIN_VALUE : initialBulk, ImmutablePath.make().extend(start, startStep.getLabels()), false);
         else if (requirements.contains(TraverserRequirement.LABELED_PATH))
-            return new DefaultTraverser<>(start, startStep, requirements.contains(TraverserRequirement.ONE_BULK) ? -1 : initialBulk, ImmutablePath.make().extend(start, startStep.getLabels()), true);
+            return new DefaultTraverser<>(start, startStep, requirements.contains(TraverserRequirement.ONE_BULK) ? Long.MIN_VALUE : initialBulk, ImmutablePath.make().extend(start, startStep.getLabels()), true);
         else
-            return new DefaultTraverser<>(start, startStep, requirements.contains(TraverserRequirement.ONE_BULK) ? -1 : initialBulk, EmptyPath.instance(), true);
+            return new DefaultTraverser<>(start, startStep, requirements.contains(TraverserRequirement.ONE_BULK) ? Long.MIN_VALUE : initialBulk, EmptyPath.instance(), true);
     }
 
     @Override
