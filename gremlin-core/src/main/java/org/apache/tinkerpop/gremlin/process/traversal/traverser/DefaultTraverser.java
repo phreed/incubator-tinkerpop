@@ -39,13 +39,14 @@ public final class DefaultTraverser<T> implements Traverser.Admin<T> {
     private T t;
     private long bulk = 1l;
     private String stepId;
-    private Path path;
     private short loops = 0;
-    private Set<String> tags = null;
+    private Set<String> tags;
+    private Object sack;
+    private Path path;
     private transient TraversalSideEffects sideEffects;
-    private boolean onlyLabeledPaths;
-    private boolean oneBulk;
-    private Object sack = null;
+    ///
+    private boolean onlyLabeledPaths; // we need to get rid of this
+
 
     /**
      * A no-args constructor  is necessary for Kryo serialization.
@@ -54,28 +55,29 @@ public final class DefaultTraverser<T> implements Traverser.Admin<T> {
 
     }
 
-    public DefaultTraverser(final T t, final Step<T, ?> step, final long initialBulk, final Path path, boolean onlyLabeledPaths, boolean oneBulk) {
+    public DefaultTraverser(final T t, final Step<T, ?> step, final long initialBulk, final Path path, boolean onlyLabeledPaths) {
         this.t = t;
         this.stepId = step.getId();
         this.bulk = initialBulk;
-        this.path = path;
+        this.path = path instanceof EmptyPath ? null : path;
         this.sideEffects = step.getTraversal().getSideEffects();
         this.onlyLabeledPaths = onlyLabeledPaths;
-        this.oneBulk = oneBulk;
         if (null != this.sideEffects.getSackInitialValue())
             this.sack = this.sideEffects.getSackInitialValue().get();
     }
 
 
     @Override
-    public void addLabels(final Set<String> labels) {
-        if (this.onlyLabeledPaths) {
-            if (!labels.isEmpty())
-                this.path = this.path.size() == 0 || !this.path.get(this.path.size() - 1).equals(this.t) ?
-                        this.path.extend(this.t, labels) :
-                        this.path.extend(labels);
-        } else
-            this.path = this.path.extend(labels);
+    public void addLabels(final Set<String> labels) {  // we need to get rid of this too
+        if (null != this.path) {
+            if (this.onlyLabeledPaths) {
+                if (!labels.isEmpty())
+                    this.path = this.path.size() == 0 || !this.path.get(this.path.size() - 1).equals(this.t) ?
+                            this.path.extend(this.t, labels) :
+                            this.path.extend(labels);
+            } else
+                this.path = this.path.extend(labels);
+        }
     }
 
     @Override
@@ -85,8 +87,7 @@ public final class DefaultTraverser<T> implements Traverser.Admin<T> {
 
     @Override
     public void incrLoops(final String stepLabel) {
-        if (!this.oneBulk)
-            this.loops++;
+        this.loops++;
     }
 
     @Override
@@ -112,7 +113,7 @@ public final class DefaultTraverser<T> implements Traverser.Admin<T> {
     @Override
     public Admin<T> detach() {
         this.t = ReferenceFactory.detach(this.t);
-        if (!(this.path instanceof EmptyPath))
+        if (null != this.path)
             this.path = ReferenceFactory.detach(this.path);
         return this;
     }
@@ -144,30 +145,24 @@ public final class DefaultTraverser<T> implements Traverser.Admin<T> {
     public <R> Admin<R> split(final R r, final Step<T, R> step) {
         final DefaultTraverser<R> clone = (DefaultTraverser<R>) this.clone();
         clone.t = r;
-        if (this.onlyLabeledPaths) {
-            if (!step.getLabels().isEmpty())
-                clone.path = this.path.clone().extend(r, step.getLabels());
-        } else
-            clone.path = this.path.clone().extend(r, step.getLabels());
-        if (null != this.tags)
-            clone.tags = new HashSet<>(this.tags);
-        clone.sack = null == clone.sack ? null : null == clone.sideEffects.getSackSplitter() ? clone.sack : clone.sideEffects.getSackSplitter().apply(clone.sack);
+        if (null != this.path) {
+            if (this.onlyLabeledPaths) {
+                if (!step.getLabels().isEmpty())
+                    clone.path = clone.path.extend(r, step.getLabels());
+            } else
+                clone.path = clone.path.extend(r, step.getLabels());
+        }
         return clone;
     }
 
     @Override
     public Admin<T> split() {
-        final DefaultTraverser<T> clone = (DefaultTraverser<T>) this.clone();
-        clone.path = this.path.clone();
-        if (null != this.tags)
-            clone.tags = new HashSet<>(this.tags);
-        clone.sack = null == clone.sack ? null : null == clone.sideEffects.getSackSplitter() ? clone.sack : clone.sideEffects.getSackSplitter().apply(clone.sack);
-        return clone;
+        return (DefaultTraverser.Admin<T>) this.clone();
     }
 
     @Override
     public void merge(final Traverser.Admin<?> other) {
-        if (!this.oneBulk)
+        if (-1 != this.bulk)
             this.bulk = this.bulk + other.bulk();
         if (!other.getTags().isEmpty()) {
             if (this.tags == null) this.tags = new HashSet<>();
@@ -194,7 +189,7 @@ public final class DefaultTraverser<T> implements Traverser.Admin<T> {
 
     @Override
     public Path path() {
-        return this.path;
+        return null == this.path ? EmptyPath.instance() : this.path;
     }
 
     @Override
@@ -204,16 +199,19 @@ public final class DefaultTraverser<T> implements Traverser.Admin<T> {
 
     @Override
     public long bulk() {
-        return this.bulk;
+        return this.bulk == -1 ? 1 : this.bulk;
     }
 
     @Override
     public Traverser<T> clone() {
         try {
             final DefaultTraverser<T> clone = (DefaultTraverser<T>) super.clone();
-            if (this.tags != null)
-                clone.getTags().addAll(this.tags);
-            clone.path = this.path.clone();
+            if (null != this.tags)
+                clone.tags = new HashSet<>(this.tags);
+            if (null != this.path)
+                clone.path = this.path.clone();
+            if (null != this.sack)
+                clone.sack = null == clone.sideEffects.getSackSplitter() ? this.sack : clone.sideEffects.getSackSplitter().apply(this.sack);
             return clone;
         } catch (final CloneNotSupportedException e) {
             throw new IllegalStateException(e.getMessage(), e);
@@ -224,17 +222,17 @@ public final class DefaultTraverser<T> implements Traverser.Admin<T> {
 
     @Override
     public int hashCode() {
-        return this.t.hashCode() + this.stepId.hashCode() + this.loops + this.path.hashCode();
+        return this.t.hashCode() + this.stepId.hashCode() + this.loops + (null == this.path ? 0 : this.path.hashCode());
     }
 
     @Override
     public boolean equals(final Object object) {
         return object instanceof DefaultTraverser &&
-                ((DefaultTraverser) object).get().equals(this.t) &&
-                ((DefaultTraverser) object).stepId.equals(this.stepId) &&
-                ((DefaultTraverser) object).loops() == this.loops &&
+                this.t.equals(((DefaultTraverser) object).t) &&
+                this.stepId.equals(((DefaultTraverser) object).stepId) &&
+                this.loops == ((DefaultTraverser) object).loops &&
                 (null == this.sack || (null != this.sideEffects && null != this.sideEffects.getSackMerger())) && // hmmm... serialization in OLAP destroys the transient sideEffects
-                ((DefaultTraverser) object).path().equals(this.path);
+                (null == this.path || this.path.equals(((DefaultTraverser) object).path));
     }
 
     @Override

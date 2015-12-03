@@ -362,7 +362,7 @@ public class MatchStepTest extends StepTest {
         countMatchAlgorithm.recordEnd(EmptyTraverser.instance(), forthPattern);
         countMatchAlgorithm.recordEnd(EmptyTraverser.instance(), forthPattern);
         //
-        Traverser.Admin traverser = new DefaultTraverser<>(1, EmptyStep.instance(), 1l, ImmutablePath.make().extend(1, Collections.emptySet()), false, false); // TODO: SHOULD WORK WITH ONLY LABELED PATHS
+        Traverser.Admin traverser = new DefaultTraverser<>(1, EmptyStep.instance(), 1l, ImmutablePath.make().extend(1, Collections.emptySet()), false); // TODO: SHOULD WORK WITH ONLY LABELED PATHS
         traverser.addLabels(Collections.singleton("a"));
         assertEquals(firstPattern, countMatchAlgorithm.apply(traverser));
         traverser = traverser.split(1, EmptyStep.instance());
