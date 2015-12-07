@@ -64,7 +64,7 @@ public final class DefaultTraverser<T> implements Traverser.Admin<T> {
 
     @Override
     public void setPath(final Path path) {
-        this.path = path instanceof EmptyPath ? null : path.clone();
+        this.path = path instanceof EmptyPath ? null : path.clone();   // TODO: clone() needed?
     }
 
     @Override

@@ -37,6 +37,11 @@ public final class EmptyPath implements Path, Serializable {
     }
 
     @Override
+    public boolean isFullPath() {
+        return false;
+    }
+
+    @Override
     public int size() {
         return 0;
     }

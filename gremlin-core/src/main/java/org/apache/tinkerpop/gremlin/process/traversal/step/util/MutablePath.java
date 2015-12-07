@@ -24,7 +24,6 @@ import org.apache.tinkerpop.gremlin.process.traversal.Pop;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -57,6 +56,10 @@ public class MutablePath implements Path, Serializable {
         final MutablePath path = new MutablePath();
         path.fullPath = fullPath;
         return path;
+    }
+
+    public boolean isFullPath() {
+        return this.fullPath;
     }
 
     @Override
@@ -97,16 +100,12 @@ public class MutablePath implements Path, Serializable {
         if (this.fullPath)
             this.labels.get(this.labels.size() - 1).addAll(labels);
         else if (!labels.isEmpty()) {
-            if (this.labels.isEmpty()) {
+            if (this.objects.isEmpty() || !this.objects.get(this.objects.size() - 1).equals(this.currentObject)) {
                 this.objects.add(this.currentObject);
-                this.labels.add(new HashSet<>(labels));
-            } else if (!this.objects.get(this.objects.size() - 1).equals(this.currentObject)) {
-                this.objects.add(this.currentObject);
-                this.labels.add(new HashSet<>(labels));
+                this.labels.add(new LinkedHashSet<>(labels));
             } else {
                 this.labels.get(this.labels.size() - 1).addAll(labels);
             }
-
         }
         return this;
     }

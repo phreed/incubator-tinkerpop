@@ -19,6 +19,7 @@
 package org.apache.tinkerpop.gremlin.structure.util.detached;
 
 import org.apache.tinkerpop.gremlin.process.traversal.Path;
+import org.apache.tinkerpop.gremlin.process.traversal.step.util.ImmutablePath;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.MutablePath;
 import org.apache.tinkerpop.gremlin.structure.Element;
 import org.apache.tinkerpop.gremlin.structure.Property;
@@ -40,6 +41,8 @@ public class DetachedPath extends MutablePath implements Attachable<Path> {
     }
 
     protected DetachedPath(final Path path, final boolean withProperties) {
+        this.fullPath = path.isFullPath();
+        this.currentObject = DetachedFactory.detach(path instanceof MutablePath ? ((MutablePath) path).currentObject : ((ImmutablePath) path).currentObject, withProperties);
         path.forEach((object, labels) -> {
             if (object instanceof DetachedElement || object instanceof DetachedProperty || object instanceof DetachedPath) {
                 this.objects.add(object);
@@ -62,7 +65,8 @@ public class DetachedPath extends MutablePath implements Attachable<Path> {
 
     @Override
     public Path attach(final Function<Attachable<Path>, Path> method) {
-        final Path path = MutablePath.make();
+        final Path path = MutablePath.make(this.isFullPath());
+        ((MutablePath) path).currentObject = this.currentObject;
         this.forEach((object, labels) -> path.extend(object instanceof Attachable ? ((Attachable) object).attach(method) : object, labels));
         return path;
     }

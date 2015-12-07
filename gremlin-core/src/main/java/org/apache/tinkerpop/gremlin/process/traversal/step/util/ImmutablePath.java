@@ -20,7 +20,6 @@ package org.apache.tinkerpop.gremlin.process.traversal.step.util;
 
 import org.apache.tinkerpop.gremlin.process.traversal.Path;
 import org.apache.tinkerpop.gremlin.process.traversal.Pop;
-import org.apache.tinkerpop.gremlin.structure.Element;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,16 +33,21 @@ import java.util.Set;
  */
 public class ImmutablePath implements Path, ImmutablePathImpl, Serializable, Cloneable {
 
-    private ImmutablePathImpl previousPath = TailPath.instance();
-    private Object currentObject;
+    private ImmutablePathImpl previousPath;
+    public Object currentObject;
     private Set<String> currentLabels = new LinkedHashSet<>();
+    private boolean fullPath = true;
 
     protected ImmutablePath() {
 
     }
 
     public static Path make() {
-        return TailPath.instance();
+        return TailPath.instance(true);
+    }
+
+    public static Path make(final boolean fullPath) {
+        return TailPath.instance(fullPath);
     }
 
     @SuppressWarnings("CloneDoesntCallSuperClone,CloneDoesntDeclareCloneNotSupportedException")
@@ -52,10 +56,16 @@ public class ImmutablePath implements Path, ImmutablePathImpl, Serializable, Clo
         return this;
     }
 
-    private ImmutablePath(final ImmutablePathImpl previousPath, final Object currentObject, final Set<String> currentLabels) {
+    private ImmutablePath(final ImmutablePathImpl previousPath, final Object currentObject, final Set<String> currentLabels, final boolean fullPath) {
         this.previousPath = previousPath;
         this.currentObject = currentObject;
         this.currentLabels.addAll(currentLabels);
+        this.fullPath = fullPath;
+    }
+
+    @Override
+    public boolean isFullPath() {
+        return this.fullPath;
     }
 
     @Override
@@ -65,15 +75,27 @@ public class ImmutablePath implements Path, ImmutablePathImpl, Serializable, Clo
 
     @Override
     public Path extend(final Object object, final Set<String> labels) {
-        return new ImmutablePath(this, object, labels);
+        if (this.fullPath)
+            return new ImmutablePath(this, object, labels, this.fullPath);
+        else {
+            if (!this.currentObject.equals(object)) {
+                return new ImmutablePath(this.currentLabels.isEmpty() ? this.previousPath : this, object, labels, this.fullPath);
+            } else {
+                return this.extend(labels);
+            }
+        }
     }
 
     @Override
     public Path extend(final Set<String> labels) {
-        final Set<String> temp = new LinkedHashSet<>();
-        temp.addAll(this.currentLabels);
-        temp.addAll(labels);
-        return new ImmutablePath(this.previousPath, this.currentObject, temp);
+        if (labels.isEmpty())
+            return this;
+        else {
+            final Set<String> temp = new LinkedHashSet<>();
+            temp.addAll(this.currentLabels);
+            temp.addAll(labels);
+            return new ImmutablePath(this.previousPath, this.currentObject, temp, this.fullPath);
+        }
     }
 
     @Override
@@ -178,9 +200,13 @@ public class ImmutablePath implements Path, ImmutablePathImpl, Serializable, Clo
 
 
     private static class TailPath implements Path, ImmutablePathImpl {
-        private static final TailPath INSTANCE = new TailPath();
+        private static final TailPath FULL_PATH_INSTANCE = new TailPath(true);
+        private static final TailPath LABELED_PATH_INSTANCE = new TailPath(false);
 
-        private TailPath() {
+        private final boolean fullPath;
+
+        private TailPath(final boolean fullPath) {
+            this.fullPath = fullPath;
 
         }
 
@@ -190,8 +216,13 @@ public class ImmutablePath implements Path, ImmutablePathImpl, Serializable, Clo
         }
 
         @Override
+        public boolean isFullPath() {
+            return this.fullPath;
+        }
+
+        @Override
         public Path extend(final Object object, final Set<String> labels) {
-            return new ImmutablePath(TailPath.instance(), object, labels);
+            return new ImmutablePath(this, object, labels, this.fullPath);
         }
 
         @Override
@@ -253,8 +284,8 @@ public class ImmutablePath implements Path, ImmutablePathImpl, Serializable, Clo
             return this;
         }
 
-        public static TailPath instance() {
-            return INSTANCE;
+        public static TailPath instance(boolean fullPath) {
+            return fullPath ? FULL_PATH_INSTANCE : LABELED_PATH_INSTANCE;
         }
 
         @Override

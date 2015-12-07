@@ -48,6 +48,8 @@ public interface Path extends Cloneable, Iterable<Object> {
         return this.objects().size();
     }
 
+    public boolean isFullPath();
+
     /**
      * Add a new step to the path with an object and any number of associated labels.
      *
