@@ -52,9 +52,4 @@ public final class MeanLocalStep<E extends Number, S extends Iterable<E>> extend
             return Double.NaN;
         }
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
-    }
 }

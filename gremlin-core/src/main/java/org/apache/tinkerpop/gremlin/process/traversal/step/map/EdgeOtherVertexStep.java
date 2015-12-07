@@ -20,19 +20,17 @@ package org.apache.tinkerpop.gremlin.process.traversal.step.map;
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.Traverser;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.TraverserRequirement;
+import org.apache.tinkerpop.gremlin.process.traversal.step.Pathing;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.structure.util.ElementHelper;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
  */
-public final class EdgeOtherVertexStep extends MapStep<Edge, Vertex> {
+public final class EdgeOtherVertexStep extends MapStep<Edge, Vertex> implements Pathing {
 
     public EdgeOtherVertexStep(final Traversal.Admin traversal) {
         super(traversal);
@@ -52,7 +50,7 @@ public final class EdgeOtherVertexStep extends MapStep<Edge, Vertex> {
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.PATH);
+    public boolean requiresFullPath() {
+        return true;
     }
 }

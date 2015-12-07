@@ -22,18 +22,24 @@ import org.apache.tinkerpop.gremlin.process.traversal.P;
 import org.apache.tinkerpop.gremlin.process.traversal.Pop;
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.Traverser;
+import org.apache.tinkerpop.gremlin.process.traversal.step.Pathing;
 import org.apache.tinkerpop.gremlin.process.traversal.step.Scoping;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.TraverserRequirement;
 import org.apache.tinkerpop.gremlin.process.traversal.util.ConnectiveP;
-import org.apache.tinkerpop.gremlin.process.traversal.util.TraversalHelper;
 import org.apache.tinkerpop.gremlin.structure.util.StringFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
  */
-public final class WherePredicateStep<S> extends FilterStep<S> implements Scoping {
+public final class WherePredicateStep<S> extends FilterStep<S> implements Scoping, Pathing {
 
     protected String startKey;
     protected List<String> selectKeys;
@@ -110,9 +116,7 @@ public final class WherePredicateStep<S> extends FilterStep<S> implements Scopin
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return TraversalHelper.getLabels(TraversalHelper.getRootTraversal(this.traversal)).stream().filter(this.scopeKeys::contains).findAny().isPresent() ?
-                TYPICAL_GLOBAL_REQUIREMENTS :
-                TYPICAL_LOCAL_REQUIREMENTS;
+    public boolean requiresFullPath() {
+        return false;
     }
 }

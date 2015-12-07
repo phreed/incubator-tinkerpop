@@ -51,9 +51,4 @@ public final class SumLocalStep<E extends Number, S extends Iterable<E>> extends
         }
         return (E) result;
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
-    }
 }

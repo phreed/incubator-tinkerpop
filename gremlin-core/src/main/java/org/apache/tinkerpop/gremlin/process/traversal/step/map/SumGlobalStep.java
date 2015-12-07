@@ -45,21 +45,10 @@ import static org.apache.tinkerpop.gremlin.process.traversal.NumberHelper.mul;
  */
 public final class SumGlobalStep<S extends Number> extends ReducingBarrierStep<S, S> implements MapReducer {
 
-    private static final Set<TraverserRequirement> REQUIREMENTS = EnumSet.of(
-            TraverserRequirement.BULK,
-            TraverserRequirement.OBJECT
-    );
-
     public SumGlobalStep(final Traversal.Admin traversal) {
         super(traversal);
         this.setSeedSupplier(new ConstantSupplier<>((S) Integer.valueOf(0)));
         this.setBiFunction(SumGlobalBiFunction.instance());
-    }
-
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return REQUIREMENTS;
     }
 
     @Override

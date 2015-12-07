@@ -21,6 +21,7 @@ package org.apache.tinkerpop.gremlin.process.traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.strategy.decoration.ConnectiveStrategy;
 import org.apache.tinkerpop.gremlin.process.traversal.strategy.finalization.EngineDependentStrategy;
 import org.apache.tinkerpop.gremlin.process.traversal.strategy.finalization.ProfileStrategy;
+import org.apache.tinkerpop.gremlin.process.traversal.strategy.finalization.TraverserRequirementsStrategy;
 import org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.AdjacentToIncidentStrategy;
 import org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.FilterRankingStrategy;
 import org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.IdentityRemovalStrategy;
@@ -206,7 +207,8 @@ public interface TraversalStrategies extends Serializable, Cloneable {
                     MatchPredicateStrategy.instance(),
                     RangeByIsCountStrategy.instance(),
                     ComputerVerificationStrategy.instance(),
-                    StandardVerificationStrategy.instance());
+                    StandardVerificationStrategy.instance(),
+                    TraverserRequirementsStrategy.instance());
             //LambdaRestrictionStrategy.instance(),
             //LazyBarrierStrategy.instance(),
 

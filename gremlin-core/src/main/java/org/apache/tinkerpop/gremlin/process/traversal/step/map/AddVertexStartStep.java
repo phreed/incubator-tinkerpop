@@ -92,11 +92,6 @@ public final class AddVertexStartStep extends AbstractStep<Vertex, Vertex> imple
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements();
-    }
-
-    @Override
     public int hashCode() {
         return super.hashCode() ^ this.parameters.hashCode();
     }

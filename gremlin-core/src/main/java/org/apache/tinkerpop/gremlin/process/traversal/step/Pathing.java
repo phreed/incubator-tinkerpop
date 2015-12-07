@@ -16,27 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.tinkerpop.gremlin.process.traversal.step.map;
 
-import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
-import org.apache.tinkerpop.gremlin.process.traversal.Traverser;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.TraverserRequirement;
-import org.apache.tinkerpop.gremlin.structure.Element;
-
-import java.util.Collections;
-import java.util.Set;
+package org.apache.tinkerpop.gremlin.process.traversal.step;
 
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
  */
-public final class IdStep<S extends Element> extends MapStep<S, Object> {
+public interface Pathing {
 
-    public IdStep(final Traversal.Admin traversal) {
-        super(traversal);
-    }
-
-    @Override
-    protected Object map(final Traverser.Admin<S> traverser) {
-        return traverser.get().id();
-    }
+    public boolean requiresFullPath();
 }

@@ -143,11 +143,6 @@ public final class GroupSideEffectStepV3d0<S, K, V, R> extends SideEffectStep<S>
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements(TraverserRequirement.SIDE_EFFECTS, TraverserRequirement.BULK);
-    }
-
-    @Override
     public GroupSideEffectStepV3d0<S, K, V, R> clone() {
         final GroupSideEffectStepV3d0<S, K, V, R> clone = (GroupSideEffectStepV3d0<S, K, V, R>) super.clone();
         if (null != this.keyTraversal)

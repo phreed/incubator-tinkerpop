@@ -50,17 +50,10 @@ import static org.apache.tinkerpop.gremlin.process.traversal.NumberHelper.mul;
  */
 public final class MeanGlobalStep<S extends Number, E extends Number> extends ReducingBarrierStep<S, E> implements MapReducer {
 
-    private static final Set<TraverserRequirement> REQUIREMENTS = EnumSet.of(TraverserRequirement.OBJECT, TraverserRequirement.BULK);
-
     public MeanGlobalStep(final Traversal.Admin traversal) {
         super(traversal);
         this.setSeedSupplier((Supplier) MeanNumberSupplier.instance());
         this.setBiFunction((BiFunction) MeanGlobalBiFunction.instance());
-    }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return REQUIREMENTS;
     }
 
     @Override

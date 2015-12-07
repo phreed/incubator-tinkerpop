@@ -20,11 +20,8 @@ package org.apache.tinkerpop.gremlin.process.traversal.step.map;
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.Traverser;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.TraverserRequirement;
 
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.Set;
 
 import static org.apache.tinkerpop.gremlin.process.traversal.NumberHelper.min;
 
@@ -51,10 +48,5 @@ public final class MinLocalStep<E extends Number, S extends Iterable<E>> extends
             result = Double.NaN;
         }
         return (E) result;
-    }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
     }
 }

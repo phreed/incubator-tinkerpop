@@ -57,11 +57,6 @@ public class BranchStep<S, E, M> extends ComputerAwareStep<S, E> implements Trav
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements();
-    }
-
-    @Override
     public List<Traversal.Admin<S, E>> getGlobalChildren() {
         return Collections.unmodifiableList(this.traversalOptions.values().stream()
                 .flatMap(List::stream)

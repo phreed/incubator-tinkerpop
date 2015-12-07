@@ -50,11 +50,6 @@ public abstract class ConnectiveStep<S> extends AbstractStep<S, S> implements Tr
         return this.traversals;
     }
 
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements();
-    }
-
     public void addLocalChild(final Traversal.Admin<?, ?> localChildTraversal) {
         this.traversals.add(this.integrateChild((Traversal.Admin) localChildTraversal));
     }

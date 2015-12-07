@@ -88,11 +88,6 @@ public final class OrderLocalStep<S, M> extends MapStep<S, S> implements Compara
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
-    }
-
-    @Override
     public <S, E> List<Traversal.Admin<S, E>> getLocalChildren() {
         return Collections.unmodifiableList(this.comparators.stream()
                 .filter(comparator -> comparator instanceof TraversalComparator)

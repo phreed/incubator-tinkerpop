@@ -101,11 +101,6 @@ public final class SampleLocalStep<S> extends MapStep<S, S> {
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
-    }
-
-    @Override
     public int hashCode() {
         return super.hashCode() ^ this.amountToSample;
     }

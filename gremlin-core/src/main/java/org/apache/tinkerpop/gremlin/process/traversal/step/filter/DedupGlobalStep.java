@@ -105,11 +105,6 @@ public final class DedupGlobalStep<S> extends FilterStep<S> implements Traversal
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.dedupLabels == null ? this.getSelfAndChildRequirements(TraverserRequirement.BULK) : this.getSelfAndChildRequirements(TraverserRequirement.LABELED_PATH, TraverserRequirement.BULK);
-    }
-
-    @Override
     public void setBypass(final boolean bypass) {
         this.bypass = bypass;
     }

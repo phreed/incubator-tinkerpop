@@ -70,11 +70,6 @@ public class HasStep<S extends Element> extends FilterStep<S> implements HasCont
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return EnumSet.of(TraverserRequirement.OBJECT);
-    }
-
-    @Override
     public HasStep<S> clone() {
         final HasStep<S> clone = (HasStep<S>) super.clone();
         clone.hasContainers = new ArrayList<>();

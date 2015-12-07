@@ -86,11 +86,6 @@ public final class GroupCountSideEffectStep<S, E> extends SideEffectStep<S> impl
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements(TraverserRequirement.BULK, TraverserRequirement.SIDE_EFFECTS);
-    }
-
-    @Override
     public GroupCountSideEffectStep<S, E> clone() {
         final GroupCountSideEffectStep<S, E> clone = (GroupCountSideEffectStep<S, E>) super.clone();
         if (null != this.groupTraversal)

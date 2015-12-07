@@ -98,11 +98,6 @@ public final class GroupStep<S, K, V> extends ReducingBarrierStep<S, Map<K, V>> 
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements(TraverserRequirement.OBJECT, TraverserRequirement.BULK);
-    }
-
-    @Override
     public GroupStep<S, K, V> clone() {
         final GroupStep<S, K, V> clone = (GroupStep<S, K, V>) super.clone();
         if (null != this.keyTraversal)

@@ -51,11 +51,6 @@ public final class MaxGlobalStep<S extends Number> extends ReducingBarrierStep<S
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
-    }
-
-    @Override
     public MapReduce<MapReduce.NullObject, Number, MapReduce.NullObject, Number, Number> getMapReduce() {
         return MaxGlobalMapReduce.instance();
     }

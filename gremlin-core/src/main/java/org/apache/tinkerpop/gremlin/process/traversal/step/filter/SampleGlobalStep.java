@@ -103,10 +103,6 @@ public final class SampleGlobalStep<S> extends CollectingBarrierStep<S> implemen
         traverserSet.addAll(sampledSet);
     }
 
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements(TraverserRequirement.BULK);
-    }
 
     @Override
     public SampleGlobalStep<S> clone() {

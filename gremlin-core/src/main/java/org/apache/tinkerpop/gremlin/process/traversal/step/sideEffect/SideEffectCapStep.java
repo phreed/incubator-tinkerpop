@@ -66,11 +66,6 @@ public final class SideEffectCapStep<S, E> extends SupplyingBarrierStep<S, E> {
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.SIDE_EFFECTS);
-    }
-
-    @Override
     protected E supply() {
         return this.sideEffectKeys.size() == 1 ?
                 FinalGet.tryFinalGet(this.getTraversal().asAdmin().getSideEffects().<E>get(this.sideEffectKeys.get(0)).get()) :

@@ -39,9 +39,4 @@ public final class PropertyKeyStep extends MapStep<Property, String> {
     protected String map(final Traverser.Admin<Property> traverser) {
         return traverser.get().key();
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
-    }
 }

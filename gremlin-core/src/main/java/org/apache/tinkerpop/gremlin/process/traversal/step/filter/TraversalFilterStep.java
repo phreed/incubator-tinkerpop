@@ -67,9 +67,4 @@ public final class TraversalFilterStep<S> extends FilterStep<S> implements Trave
     public int hashCode() {
         return super.hashCode() ^ this.filterTraversal.hashCode();
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements();
-    }
 }

@@ -39,9 +39,4 @@ public final class LabelStep<S extends Element> extends MapStep<S, String> {
     protected String map(final Traverser.Admin<S> traverser) {
         return traverser.get().label();
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
-    }
 }

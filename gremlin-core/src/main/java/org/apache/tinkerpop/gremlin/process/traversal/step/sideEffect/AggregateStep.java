@@ -91,11 +91,6 @@ public final class AggregateStep<S> extends CollectingBarrierStep<S> implements 
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements(TraverserRequirement.BULK, TraverserRequirement.SIDE_EFFECTS);
-    }
-
-    @Override
     public AggregateStep<S> clone() {
         final AggregateStep<S> clone = (AggregateStep<S>) super.clone();
         if (null != this.aggregateTraversal)

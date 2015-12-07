@@ -98,11 +98,6 @@ public final class AddEdgeStep<S> extends MapStep<S, Edge> implements Mutating<E
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements(TraverserRequirement.OBJECT);
-    }
-
-    @Override
     public CallbackRegistry<Event.EdgeAddedEvent> getMutatingCallbackRegistry() {
         if (null == this.callbackRegistry) this.callbackRegistry = new ListCallbackRegistry<>();
         return this.callbackRegistry;

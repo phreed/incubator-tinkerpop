@@ -139,9 +139,4 @@ public final class EmptyStep<S, E> implements Step<S, E>, TraversalParent {
     public boolean equals(final Object object) {
         return object instanceof EmptyStep;
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.emptySet();
-    }
 }

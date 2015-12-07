@@ -38,9 +38,4 @@ public final class SackStep<S, E> extends MapStep<S, E> {
     protected E map(final Traverser.Admin<S> traverser) {
         return traverser.sack();
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.SACK);
-    }
 }

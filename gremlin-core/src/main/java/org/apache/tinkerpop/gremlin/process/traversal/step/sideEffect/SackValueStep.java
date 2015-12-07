@@ -71,11 +71,6 @@ public final class SackValueStep<S, A, B> extends SideEffectStep<S> implements T
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return getSelfAndChildRequirements(TraverserRequirement.SACK);
-    }
-
-    @Override
     public SackValueStep<S, A, B> clone() {
         final SackValueStep<S, A, B> clone = (SackValueStep<S, A, B>) super.clone();
         if (null != this.sackTraversal)

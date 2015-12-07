@@ -64,7 +64,7 @@ public final class DefaultTraverser<T> implements Traverser.Admin<T> {
 
     @Override
     public void setPath(final Path path) {
-        this.path = path instanceof EmptyPath ? null : path.clone();   // TODO: clone() needed?
+        this.path = path instanceof EmptyPath ? null : path;
     }
 
     @Override
@@ -108,7 +108,7 @@ public final class DefaultTraverser<T> implements Traverser.Admin<T> {
     @Override
     public T attach(final Function<Attachable<T>, T> method) {
         // you do not want to attach a path because it will reference graph objects not at the current vertex
-        if (this.t instanceof Attachable && !(((Attachable) this.t).get() instanceof Path))
+        if (this.t instanceof Attachable && !(this.t instanceof Path))
             this.t = ((Attachable<T>) this.t).attach(method);
         return this.t;
     }

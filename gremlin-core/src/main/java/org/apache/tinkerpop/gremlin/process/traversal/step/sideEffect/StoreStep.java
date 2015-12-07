@@ -89,11 +89,6 @@ public final class StoreStep<S> extends SideEffectStep<S> implements SideEffectC
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements(TraverserRequirement.SIDE_EFFECTS, TraverserRequirement.BULK);
-    }
-
-    @Override
     public StoreStep<S> clone() {
         final StoreStep<S> clone = (StoreStep<S>) super.clone();
         if (null != this.storeTraversal)

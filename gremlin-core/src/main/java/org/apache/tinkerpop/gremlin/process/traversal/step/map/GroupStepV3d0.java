@@ -102,11 +102,6 @@ public final class GroupStepV3d0<S, K, V, R> extends ReducingBarrierStep<S, Map<
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements(TraverserRequirement.SIDE_EFFECTS, TraverserRequirement.BULK);
-    }
-
-    @Override
     public GroupStepV3d0<S, K, V, R> clone() {
         final GroupStepV3d0<S, K, V, R> clone = (GroupStepV3d0<S, K, V, R>) super.clone();
         if (null != this.keyTraversal)

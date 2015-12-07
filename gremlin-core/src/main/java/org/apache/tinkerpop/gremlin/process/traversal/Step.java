@@ -153,16 +153,6 @@ public interface Step<S, E> extends Iterator<Traverser<E>>, Serializable, Clonea
     public String getId();
 
     /**
-     * Provide the necessary {@link org.apache.tinkerpop.gremlin.process.traversal.traverser.TraverserRequirement} that must be met by the traverser in order for the step to function properly.
-     * The provided default implements returns an empty set.
-     *
-     * @return the set of requirements
-     */
-    public default Set<TraverserRequirement> getRequirements() {
-        return Collections.emptySet();
-    }
-
-    /**
      * Compare the current step with another step.
      *
      * @param other      the other step

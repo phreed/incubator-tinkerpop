@@ -37,6 +37,7 @@ import org.apache.tinkerpop.gremlin.structure.Graph;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
@@ -84,6 +85,11 @@ public abstract class AbstractLambdaTraversal<S, E> implements Traversal.Admin<S
     @Override
     public void addTraverserRequirement(final TraverserRequirement traverserRequirement) {
 
+    }
+
+    @Override
+    public Set<TraverserRequirement> getTraverserRequirements() {
+        return Collections.emptySet();
     }
 
     @Override

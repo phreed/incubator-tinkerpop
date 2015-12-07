@@ -55,11 +55,6 @@ public final class CoalesceStep<S, E> extends FlatMapStep<S, E> implements Trave
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements();
-    }
-
-    @Override
     public List<Traversal.Admin<S, E>> getLocalChildren() {
         return Collections.unmodifiableList(this.coalesceTraversals);
     }

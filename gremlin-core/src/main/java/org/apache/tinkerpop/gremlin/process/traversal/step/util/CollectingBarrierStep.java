@@ -48,11 +48,6 @@ public abstract class CollectingBarrierStep<S> extends AbstractStep<S, S> implem
     public abstract void barrierConsumer(final TraverserSet<S> traverserSet);
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.BULK);
-    }
-
-    @Override
     public void processAllStarts() {
         if (this.starts.hasNext()) {
             if (Integer.MAX_VALUE == this.maxBarrierSize) {

@@ -157,11 +157,6 @@ public final class GroupSideEffectStep<S, K, V> extends SideEffectStep<S> implem
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements(TraverserRequirement.OBJECT, TraverserRequirement.BULK, TraverserRequirement.SIDE_EFFECTS);
-    }
-
-    @Override
     public GroupSideEffectStep<S, K, V> clone() {
         final GroupSideEffectStep<S, K, V> clone = (GroupSideEffectStep<S, K, V>) super.clone();
         if (null != this.keyTraversal)

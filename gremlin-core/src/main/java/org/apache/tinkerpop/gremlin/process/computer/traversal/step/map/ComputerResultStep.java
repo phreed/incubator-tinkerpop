@@ -123,9 +123,4 @@ public final class ComputerResultStep<S> extends AbstractStep<S, S> implements B
     public String toString() {
         return StringFactory.stepString(this);
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return EnumSet.of(TraverserRequirement.OBJECT);
-    }
 }

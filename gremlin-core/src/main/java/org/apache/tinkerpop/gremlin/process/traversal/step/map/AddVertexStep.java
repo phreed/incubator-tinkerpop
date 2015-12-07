@@ -89,11 +89,6 @@ public final class AddVertexStep<S> extends MapStep<S, Vertex> implements Mutati
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements();
-    }
-
-    @Override
     public String toString() {
         return StringFactory.stepString(this, this.parameters);
     }

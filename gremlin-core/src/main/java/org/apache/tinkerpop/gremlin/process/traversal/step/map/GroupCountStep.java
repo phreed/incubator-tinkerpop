@@ -69,11 +69,6 @@ public final class GroupCountStep<S, E> extends ReducingBarrierStep<S, Map<E, Lo
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements(TraverserRequirement.BULK);
-    }
-
-    @Override
     public MapReduce<E, Long, E, Long, Map<E, Long>> getMapReduce() {
         return GroupCountMapReduce.instance();
     }

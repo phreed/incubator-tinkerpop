@@ -22,6 +22,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.Pop;
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.Traverser;
 import org.apache.tinkerpop.gremlin.process.traversal.step.PathProcessor;
+import org.apache.tinkerpop.gremlin.process.traversal.step.Pathing;
 import org.apache.tinkerpop.gremlin.process.traversal.step.Scoping;
 import org.apache.tinkerpop.gremlin.process.traversal.step.TraversalParent;
 import org.apache.tinkerpop.gremlin.process.traversal.traverser.TraverserRequirement;
@@ -36,7 +37,7 @@ import java.util.Set;
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
  */
-public final class SelectOneStep<S, E> extends MapStep<S, E> implements TraversalParent, Scoping, PathProcessor {
+public final class SelectOneStep<S, E> extends MapStep<S, E> implements TraversalParent, Scoping, PathProcessor, Pathing {
 
     private final Pop pop;
     private final String selectKey;
@@ -88,10 +89,8 @@ public final class SelectOneStep<S, E> extends MapStep<S, E> implements Traversa
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements(TraversalHelper.getLabels(TraversalHelper.getRootTraversal(this.traversal)).contains(this.selectKey) ?
-                TYPICAL_GLOBAL_REQUIREMENTS_ARRAY :
-                TYPICAL_LOCAL_REQUIREMENTS_ARRAY);
+    public boolean requiresFullPath() {
+        return false;
     }
 
     @Override

@@ -36,11 +36,6 @@ import java.util.*;
  */
 public final class SubgraphStep extends SideEffectStep<Edge> implements SideEffectCapable {
 
-    private static final Set<TraverserRequirement> REQUIREMENTS = EnumSet.of(
-            TraverserRequirement.OBJECT,
-            TraverserRequirement.SIDE_EFFECTS
-    );
-
     private Graph subgraph;
     private String sideEffectKey;
 
@@ -72,11 +67,6 @@ public final class SubgraphStep extends SideEffectStep<Edge> implements SideEffe
     @Override
     public String toString() {
         return StringFactory.stepString(this, this.sideEffectKey);
-    }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return REQUIREMENTS;
     }
 
     @Override

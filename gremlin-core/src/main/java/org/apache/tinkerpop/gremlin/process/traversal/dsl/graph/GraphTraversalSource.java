@@ -180,7 +180,8 @@ public class GraphTraversalSource implements TraversalSource {
 
     public GraphTraversalSourceStub withBulk(final boolean useBulk) {
         final GraphTraversal.Admin traversal = this.generateTraversal();
-        traversal.addTraverserRequirement(useBulk ? TraverserRequirement.BULK : TraverserRequirement.ONE_BULK);
+        if (!useBulk)
+            traversal.addTraverserRequirement(TraverserRequirement.ONE_BULK);
         return new GraphTraversalSourceStub(traversal);
     }
 
@@ -352,7 +353,8 @@ public class GraphTraversalSource implements TraversalSource {
         }
 
         public GraphTraversalSourceStub withBulk(final boolean useBulk) {
-            this.traversal.addTraverserRequirement(useBulk ? TraverserRequirement.BULK : TraverserRequirement.ONE_BULK);
+            if (!useBulk)
+                this.traversal.addTraverserRequirement(TraverserRequirement.ONE_BULK);
             return this;
         }
 

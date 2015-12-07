@@ -96,9 +96,4 @@ public class PropertyMapStep<E> extends MapStep<Element, Map<String, E>> {
         }
         return result;
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
-    }
 }

@@ -67,9 +67,4 @@ public final class IsStep<S> extends FilterStep<S> {
         return super.hashCode() ^ this.predicate.hashCode();
     }
 
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return EnumSet.of(TraverserRequirement.OBJECT);
-    }
-
 }

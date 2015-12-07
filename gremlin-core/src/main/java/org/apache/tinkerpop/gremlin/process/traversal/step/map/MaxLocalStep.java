@@ -52,9 +52,4 @@ public final class MaxLocalStep<E extends Number, S extends Iterable<E>> extends
         }
         return (E) result;
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
-    }
 }

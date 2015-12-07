@@ -24,6 +24,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.Step;
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.TraversalEngine;
 import org.apache.tinkerpop.gremlin.process.traversal.Traverser;
+import org.apache.tinkerpop.gremlin.process.traversal.step.Pathing;
 import org.apache.tinkerpop.gremlin.process.traversal.step.Scoping;
 import org.apache.tinkerpop.gremlin.process.traversal.step.TraversalParent;
 import org.apache.tinkerpop.gremlin.process.traversal.step.filter.AndStep;
@@ -63,7 +64,7 @@ import java.util.stream.Stream;
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
  */
-public final class MatchStep<S, E> extends ComputerAwareStep<S, Map<String, E>> implements TraversalParent, Scoping {
+public final class MatchStep<S, E> extends ComputerAwareStep<S, Map<String, E>> implements TraversalParent, Scoping, Pathing {
 
     public enum TraversalType {WHERE_PREDICATE, WHERE_TRAVERSAL, MATCH_TRAVERSAL}
 
@@ -152,6 +153,11 @@ public final class MatchStep<S, E> extends ComputerAwareStep<S, Map<String, E>> 
             TraversalHelper.removeToTraversal(matchTraversal.getStartStep().getNextStep(), matchTraversal.getEndStep(), newTraversal);
             TraversalHelper.insertAfterStep(new TraversalFlatMapStep<>(matchTraversal, newTraversal), matchTraversal.getStartStep(), matchTraversal);
         }
+    }
+
+    @Override
+    public boolean requiresFullPath() {
+        return false;
     }
 
     public ConnectiveStep.Connective getConnective() {
@@ -386,11 +392,6 @@ public final class MatchStep<S, E> extends ComputerAwareStep<S, Map<String, E>> 
             result ^= t.hashCode();
         }
         return result;
-    }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements(TraverserRequirement.LABELED_PATH, TraverserRequirement.SIDE_EFFECTS);
     }
 
     //////////////////////////////

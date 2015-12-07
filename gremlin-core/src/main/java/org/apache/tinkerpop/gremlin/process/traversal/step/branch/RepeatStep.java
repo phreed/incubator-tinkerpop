@@ -50,15 +50,6 @@ public final class RepeatStep<S> extends ComputerAwareStep<S, S> implements Trav
         super(traversal);
     }
 
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        final Set<TraverserRequirement> requirements = this.getSelfAndChildRequirements(TraverserRequirement.BULK);
-        if (requirements.contains(TraverserRequirement.SINGLE_LOOP))
-            requirements.add(TraverserRequirement.NESTED_LOOP);
-        requirements.add(TraverserRequirement.SINGLE_LOOP);
-        return requirements;
-    }
-
     @SuppressWarnings("unchecked")
     public void setRepeatTraversal(final Traversal.Admin<S, S> repeatTraversal) {
         if (null != this.repeatTraversal)

@@ -72,9 +72,4 @@ public class PropertiesStep<E> extends FlatMapStep<Element, E> {
         }
         return result;
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
-    }
 }

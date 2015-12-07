@@ -42,18 +42,10 @@ import java.util.function.BiFunction;
  */
 public final class CountGlobalStep<S> extends ReducingBarrierStep<S, Long> implements MapReducer {
 
-    private static final Set<TraverserRequirement> REQUIREMENTS = EnumSet.of(TraverserRequirement.BULK);
-
     public CountGlobalStep(final Traversal.Admin traversal) {
         super(traversal);
         this.setSeedSupplier(new ConstantSupplier<>(0L));
         this.setBiFunction(CountBiFunction.<S>instance());
-    }
-
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return REQUIREMENTS;
     }
 
     @Override

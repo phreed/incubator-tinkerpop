@@ -21,15 +21,12 @@ package org.apache.tinkerpop.gremlin.process.traversal.step.filter;
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.Traverser;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.TraverserRequirement;
-
-import java.util.Collections;
-import java.util.Set;
+import org.apache.tinkerpop.gremlin.process.traversal.step.Pathing;
 
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
  */
-public final class SimplePathStep<S> extends FilterStep<S> {
+public final class SimplePathStep<S> extends FilterStep<S> implements Pathing {
 
     public SimplePathStep(final Traversal.Admin traversal) {
         super(traversal);
@@ -41,7 +38,7 @@ public final class SimplePathStep<S> extends FilterStep<S> {
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.PATH);
+    public boolean requiresFullPath() {
+        return true;
     }
 }

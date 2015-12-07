@@ -39,7 +39,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
@@ -115,7 +114,7 @@ public class DefaultTraversal<S, E> implements Traversal.Admin<S, E> {
 
     @Override
     public Set<TraverserRequirement> getTraverserRequirements() {
-        Set<TraverserRequirement> requirements = new HashSet<>();
+        /*Set<TraverserRequirement> requirements = new HashSet<>();
         for (Step step : this.getSteps()) {
             requirements.addAll(step.getRequirements());
         }
@@ -129,7 +128,8 @@ public class DefaultTraversal<S, E> implements Traversal.Admin<S, E> {
             requirements.add(TraverserRequirement.BULK);
         if (requirements.contains(TraverserRequirement.ONE_BULK))
             requirements.remove(TraverserRequirement.BULK);
-        return requirements;
+        return requirements;*/
+        return this.traverserRequirements;
     }
 
     @Override

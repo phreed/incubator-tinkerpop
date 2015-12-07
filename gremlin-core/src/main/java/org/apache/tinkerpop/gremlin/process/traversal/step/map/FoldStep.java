@@ -36,8 +36,6 @@ import java.util.function.Supplier;
  */
 public final class FoldStep<S, E> extends ReducingBarrierStep<S, E> {
 
-    private static final Set<TraverserRequirement> REQUIREMENTS = EnumSet.of(TraverserRequirement.OBJECT);
-
     public FoldStep(final Traversal.Admin traversal) {
         this(traversal, (Supplier) ArrayListSupplier.instance(), (BiFunction) ArrayListBiFunction.instance());
     }
@@ -46,11 +44,6 @@ public final class FoldStep<S, E> extends ReducingBarrierStep<S, E> {
         super(traversal);
         this.setSeedSupplier(seed);
         this.setBiFunction(new FoldBiFunction<>(foldFunction));
-    }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return REQUIREMENTS;
     }
 
     /////////

@@ -92,9 +92,4 @@ public class VertexStep<E extends Element> extends FlatMapStep<Vertex, E> {
         }
         return result;
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
-    }
 }

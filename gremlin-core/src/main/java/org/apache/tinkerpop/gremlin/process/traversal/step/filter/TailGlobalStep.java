@@ -97,11 +97,6 @@ public final class TailGlobalStep<S> extends AbstractStep<S, S> implements Bypas
         return super.hashCode() ^ Long.hashCode(this.limit);
     }
 
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.BULK);
-    }
-
     private void addTail(Traverser.Admin<S> start) {
         // Calculate the tail bulk including this new start.
         this.tailBulk += start.bulk();

@@ -22,6 +22,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.Pop;
 import org.apache.tinkerpop.gremlin.process.traversal.Step;
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.Traverser;
+import org.apache.tinkerpop.gremlin.process.traversal.step.Pathing;
 import org.apache.tinkerpop.gremlin.process.traversal.step.Scoping;
 import org.apache.tinkerpop.gremlin.process.traversal.step.TraversalParent;
 import org.apache.tinkerpop.gremlin.process.traversal.step.map.MapStep;
@@ -41,7 +42,7 @@ import java.util.Set;
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
  */
-public final class WhereTraversalStep<S> extends FilterStep<S> implements TraversalParent, Scoping {
+public final class WhereTraversalStep<S> extends FilterStep<S> implements TraversalParent, Scoping, Pathing {
 
     protected Traversal.Admin<?, ?> whereTraversal;
     protected final Set<String> scopeKeys = new HashSet<>();
@@ -114,10 +115,8 @@ public final class WhereTraversalStep<S> extends FilterStep<S> implements Traver
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return TraversalHelper.getLabels(TraversalHelper.getRootTraversal(this.traversal)).stream().filter(this.scopeKeys::contains).findAny().isPresent() ?
-                TYPICAL_GLOBAL_REQUIREMENTS :
-                TYPICAL_LOCAL_REQUIREMENTS;
+    public boolean requiresFullPath() {
+        return false;
     }
 
     //////////////////////////////

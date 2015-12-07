@@ -43,9 +43,4 @@ public final class DedupLocalStep<E, S extends Iterable<E>> extends MapStep<S, S
         }
         return result;
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
-    }
 }

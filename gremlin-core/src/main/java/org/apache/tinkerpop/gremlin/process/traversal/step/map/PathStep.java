@@ -22,20 +22,19 @@ import org.apache.tinkerpop.gremlin.process.traversal.Path;
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.Traverser;
 import org.apache.tinkerpop.gremlin.process.traversal.step.PathProcessor;
+import org.apache.tinkerpop.gremlin.process.traversal.step.Pathing;
 import org.apache.tinkerpop.gremlin.process.traversal.step.TraversalParent;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.MutablePath;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.TraverserRequirement;
 import org.apache.tinkerpop.gremlin.process.traversal.util.TraversalRing;
 import org.apache.tinkerpop.gremlin.process.traversal.util.TraversalUtil;
 import org.apache.tinkerpop.gremlin.structure.util.StringFactory;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
  */
-public final class PathStep<S> extends MapStep<S, Path> implements TraversalParent, PathProcessor {
+public final class PathStep<S> extends MapStep<S, Path> implements TraversalParent, PathProcessor, Pathing {
 
     private TraversalRing<Object, Object> traversalRing;
 
@@ -92,7 +91,7 @@ public final class PathStep<S> extends MapStep<S, Path> implements TraversalPare
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements(TraverserRequirement.PATH);
+    public boolean requiresFullPath() {
+        return true;
     }
 }

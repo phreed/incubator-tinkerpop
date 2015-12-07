@@ -373,20 +373,7 @@ public interface Traversal<S, E> extends Iterator<E>, Serializable, Cloneable {
          *
          * @return the features of a traverser that are required to execute properly in this traversal
          */
-        public default Set<TraverserRequirement> getTraverserRequirements() {
-            final Set<TraverserRequirement> requirements = this.getSteps().stream()
-                    .flatMap(step -> ((Step<?, ?>) step).getRequirements().stream())
-                    .collect(Collectors.toSet());
-            if (this.getSideEffects().keys().size() > 0)
-                requirements.add(TraverserRequirement.SIDE_EFFECTS);
-            if (null != this.getSideEffects().getSackInitialValue())
-                requirements.add(TraverserRequirement.SACK);
-            if (this.getEngine().isComputer())
-                requirements.add(TraverserRequirement.BULK);
-            if (requirements.contains(TraverserRequirement.ONE_BULK))
-                requirements.remove(TraverserRequirement.BULK);
-            return requirements;
-        }
+        public Set<TraverserRequirement> getTraverserRequirements();
 
         /**
          * Add a {@link TraverserRequirement} to this traversal and respective nested sub-traversals.

@@ -70,8 +70,4 @@ public final class TailLocalStep<S> extends MapStep<S, S> {
         return super.hashCode() ^ Long.hashCode(this.limit);
     }
 
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
-    }
 }

@@ -28,10 +28,10 @@ import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.Traverser;
 import org.apache.tinkerpop.gremlin.process.traversal.step.MapReducer;
 import org.apache.tinkerpop.gremlin.process.traversal.step.PathProcessor;
+import org.apache.tinkerpop.gremlin.process.traversal.step.Pathing;
 import org.apache.tinkerpop.gremlin.process.traversal.step.SideEffectCapable;
 import org.apache.tinkerpop.gremlin.process.traversal.step.TraversalParent;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.Tree;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.TraverserRequirement;
 import org.apache.tinkerpop.gremlin.process.traversal.util.TraversalRing;
 import org.apache.tinkerpop.gremlin.process.traversal.util.TraversalUtil;
 import org.apache.tinkerpop.gremlin.structure.Graph;
@@ -41,12 +41,11 @@ import org.apache.tinkerpop.gremlin.util.function.TreeSupplier;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
  */
-public final class TreeSideEffectStep<S> extends SideEffectStep<S> implements SideEffectCapable, TraversalParent, PathProcessor, MapReducer<MapReduce.NullObject, Tree, MapReduce.NullObject, Tree, Tree> {
+public final class TreeSideEffectStep<S> extends SideEffectStep<S> implements SideEffectCapable, TraversalParent, PathProcessor, Pathing, MapReducer<MapReduce.NullObject, Tree, MapReduce.NullObject, Tree, Tree> {
 
     private TraversalRing<Object, Object> traversalRing;
     private String sideEffectKey;
@@ -82,6 +81,11 @@ public final class TreeSideEffectStep<S> extends SideEffectStep<S> implements Si
     }
 
     @Override
+    public boolean requiresFullPath() {
+        return true;
+    }
+
+    @Override
     public void reset() {
         super.reset();
         this.traversalRing.reset();
@@ -113,11 +117,6 @@ public final class TreeSideEffectStep<S> extends SideEffectStep<S> implements Si
     @Override
     public void addLocalChild(final Traversal.Admin<?, ?> treeTraversal) {
         this.traversalRing.addTraversal(this.integrateChild(treeTraversal));
-    }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements(TraverserRequirement.PATH, TraverserRequirement.SIDE_EFFECTS);
     }
 
     ////////////////

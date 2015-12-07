@@ -63,11 +63,6 @@ public final class LocalStep<S, E> extends AbstractStep<S, E> implements Travers
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.localTraversal.getTraverserRequirements();
-    }
-
-    @Override
     protected Traverser<E> processNextStart() throws NoSuchElementException {
         if (this.first) {
             this.first = false;

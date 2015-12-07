@@ -66,7 +66,7 @@ public class DetachedPath extends MutablePath implements Attachable<Path> {
     @Override
     public Path attach(final Function<Attachable<Path>, Path> method) {
         final Path path = MutablePath.make(this.isFullPath());
-        ((MutablePath) path).currentObject = this.currentObject;
+        ((MutablePath) path).currentObject = this.currentObject instanceof Attachable ? ((Attachable) this.currentObject).attach(method) : this.currentObject;
         this.forEach((object, labels) -> path.extend(object instanceof Attachable ? ((Attachable) object).attach(method) : object, labels));
         return path;
     }

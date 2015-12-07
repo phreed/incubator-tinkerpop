@@ -69,9 +69,4 @@ public final class TraversalSideEffectStep<S> extends SideEffectStep<S> implemen
     public int hashCode() {
         return super.hashCode() ^ this.sideEffectTraversal.hashCode();
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements();
-    }
 }

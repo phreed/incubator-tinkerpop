@@ -64,9 +64,4 @@ public final class EdgeVertexStep extends FlatMapStep<Edge, Vertex> {
     public void reverseDirection() {
         this.direction = this.direction.opposite();
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
-    }
 }

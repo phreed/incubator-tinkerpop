@@ -111,11 +111,6 @@ public final class AddPropertyStep<S extends Element> extends SideEffectStep<S> 
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements(TraverserRequirement.OBJECT);
-    }
-
-    @Override
     public CallbackRegistry<Event.ElementPropertyChangedEvent> getMutatingCallbackRegistry() {
         if (null == this.callbackRegistry) this.callbackRegistry = new ListCallbackRegistry<>();
         return this.callbackRegistry;

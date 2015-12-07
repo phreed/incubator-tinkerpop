@@ -21,12 +21,9 @@ package org.apache.tinkerpop.gremlin.process.traversal.step.map;
 import org.apache.tinkerpop.gremlin.process.traversal.Path;
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.Traverser;
-import org.apache.tinkerpop.gremlin.process.traversal.traverser.TraverserRequirement;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
@@ -44,10 +41,5 @@ public final class CountLocalStep<S> extends MapStep<S, Long> {
         return (item instanceof Collection) ? ((Collection) item).size()
                 : (item instanceof Map) ? ((Map) item).size()
                 : (item instanceof Path) ? ((Path) item).size() : 1L;
-    }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
     }
 }

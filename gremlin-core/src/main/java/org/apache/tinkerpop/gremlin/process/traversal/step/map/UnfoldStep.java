@@ -49,9 +49,4 @@ public final class UnfoldStep<S, E> extends FlatMapStep<S, E> {
         else
             return IteratorUtils.of((E) s);
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
-    }
 }

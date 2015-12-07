@@ -81,11 +81,6 @@ public final class OrderGlobalStep<S> extends CollectingBarrierStep<S> implement
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
-    }
-
-    @Override
     public <S, E> List<Traversal.Admin<S, E>> getLocalChildren() {
         return Collections.unmodifiableList(this.comparators.stream()
                 .filter(comparator -> comparator instanceof TraversalComparator)

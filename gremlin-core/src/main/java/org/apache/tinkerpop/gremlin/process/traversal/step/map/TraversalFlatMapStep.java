@@ -68,9 +68,4 @@ public final class TraversalFlatMapStep<S, E> extends FlatMapStep<S, E> implemen
     public int hashCode() {
         return super.hashCode() ^ this.flatMapTraversal.hashCode();
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements();
-    }
 }

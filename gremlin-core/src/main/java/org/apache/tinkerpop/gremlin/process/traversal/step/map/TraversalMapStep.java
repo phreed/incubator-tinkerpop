@@ -69,9 +69,4 @@ public final class TraversalMapStep<S, E> extends MapStep<S, E> implements Trave
     public int hashCode() {
         return super.hashCode() ^ this.mapTraversal.hashCode();
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements();
-    }
 }

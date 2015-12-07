@@ -27,6 +27,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
 import org.apache.tinkerpop.gremlin.process.traversal.Traverser;
 import org.apache.tinkerpop.gremlin.process.traversal.step.MapReducer;
 import org.apache.tinkerpop.gremlin.process.traversal.step.PathProcessor;
+import org.apache.tinkerpop.gremlin.process.traversal.step.Pathing;
 import org.apache.tinkerpop.gremlin.process.traversal.step.TraversalParent;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.ReducingBarrierStep;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.Tree;
@@ -48,7 +49,7 @@ import java.util.function.Supplier;
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
  */
-public final class TreeStep<S> extends ReducingBarrierStep<S, Tree> implements MapReducer, TraversalParent, PathProcessor {
+public final class TreeStep<S> extends ReducingBarrierStep<S, Tree> implements MapReducer, TraversalParent, PathProcessor, Pathing {
 
     private TraversalRing<Object, Object> traversalRing = new TraversalRing<>();
 
@@ -70,8 +71,8 @@ public final class TreeStep<S> extends ReducingBarrierStep<S, Tree> implements M
     }
 
     @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return this.getSelfAndChildRequirements(TraverserRequirement.PATH, TraverserRequirement.SIDE_EFFECTS);
+    public boolean requiresFullPath() {
+        return true;
     }
 
     @Override

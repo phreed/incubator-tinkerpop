@@ -40,9 +40,4 @@ public final class PropertyElementStep<E> extends MapStep<Property<E>, Element> 
     protected Element map(final Traverser.Admin<Property<E>> traverser) {
         return traverser.get().element();
     }
-
-    @Override
-    public Set<TraverserRequirement> getRequirements() {
-        return Collections.singleton(TraverserRequirement.OBJECT);
-    }
 }
