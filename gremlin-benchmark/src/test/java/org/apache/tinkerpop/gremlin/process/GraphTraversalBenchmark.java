@@ -19,28 +19,19 @@
 
 package org.apache.tinkerpop.gremlin.process;
 
+import org.apache.tinkerpop.benchmark.util.AbstractMicrobenchmark;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Graph;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph;
 import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.profile.StackProfiler;
-import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.RunnerException;
-import org.openjdk.jmh.runner.options.Options;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
-
-import java.util.concurrent.TimeUnit;
 
 /**
- * Created by twilmes on 12/24/15.
+ * @author Ted Wilmes
  */
-public class GraphTraversalPerformance {
+public class GraphTraversalBenchmark extends AbstractMicrobenchmark {
 
     @State(Scope.Thread)
     public static class GraphState {
@@ -53,29 +44,11 @@ public class GraphTraversalPerformance {
     }
 
     @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MICROSECONDS)
-    public Vertex testAddVertex(GraphState state) {
-        return state.graph.addVertex("foo");
-    }
+    public Vertex testAddVertex(GraphState state) { return state.graph.addVertex("foo"); }
 
     @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MICROSECONDS)
     public Vertex testAddV(TraversalState state) {
         return state.g.addV("foo").next();
     }
 
-
-    public static void main(String[] args) throws RunnerException {
-        Options opt = new OptionsBuilder()
-                .include(GraphTraversalPerformance.class.getSimpleName())
-                .warmupIterations(5)
-                .measurementIterations(10)
-                .addProfiler(StackProfiler.class)
-                .forks(1)
-                .build();
-
-        new Runner(opt).run();
-    }
 }
