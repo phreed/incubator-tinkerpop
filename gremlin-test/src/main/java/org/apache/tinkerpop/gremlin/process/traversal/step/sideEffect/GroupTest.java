@@ -21,7 +21,9 @@ package org.apache.tinkerpop.gremlin.process.traversal.step.sideEffect;
 import org.apache.tinkerpop.gremlin.LoadGraphWith;
 import org.apache.tinkerpop.gremlin.process.AbstractGremlinProcessTest;
 import org.apache.tinkerpop.gremlin.process.GremlinProcessRunner;
+import org.apache.tinkerpop.gremlin.process.IgnoreEngine;
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
+import org.apache.tinkerpop.gremlin.process.traversal.TraversalEngine;
 import org.apache.tinkerpop.gremlin.structure.T;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.junit.Test;
@@ -72,6 +74,8 @@ public abstract class GroupTest extends AbstractGremlinProcessTest {
     public abstract Traversal<Vertex, Map<String, Long>> get_g_V_group_byXname_substring_1X_byXconstantX1XX();
 
     public abstract Traversal<Vertex, Map<String, Long>> get_g_V_groupXaX_byXname_substring_1X_byXconstantX1XX_capXaX();
+
+    public abstract Traversal<Vertex, Map<String, Long>> get_g_withSideEffectXm__marko_1_peter_4X_V_groupXmX_byXnameX_byXconstantX1X_sumX_capXmX();
 
     @Test
     @LoadGraphWith(MODERN)
@@ -244,6 +248,23 @@ public abstract class GroupTest extends AbstractGremlinProcessTest {
         assertFalse(traversal.hasNext());
     }
 
+    @Test
+    @LoadGraphWith(MODERN)
+    @IgnoreEngine(TraversalEngine.Type.COMPUTER)
+    public void g_withSideEffectXm__marko_1_peter_4X_V_groupXmX_byXnameX_byXconstantX1X_sumX_capXmX() {
+        final Traversal<Vertex, Map<String, Long>> traversal = get_g_withSideEffectXm__marko_1_peter_4X_V_groupXmX_byXnameX_byXconstantX1X_sumX_capXmX();
+        printTraversalForm(traversal);
+        checkMap(new HashMap<String, Long>() {{
+            put("marko", 2l);
+            put("peter", 5l);
+            put("lop", 1l);
+            put("josh", 1l);
+            put("vadas", 1l);
+            put("ripple", 1l);
+        }}, traversal.next());
+        assertFalse(traversal.hasNext());
+    }
+
 
     public static class Traversals extends GroupTest {
 
@@ -305,6 +326,14 @@ public abstract class GroupTest extends AbstractGremlinProcessTest {
         @Override
         public Traversal<Vertex, Map<String, Long>> get_g_V_groupXaX_byXname_substring_1X_byXconstantX1XX_capXaX() {
             return g.V().<String, Long>group("a").<Vertex>by(v -> v.<String>value("name").substring(0, 1)).by(constant(1l)).cap("a");
+        }
+
+        @Override
+        public Traversal<Vertex, Map<String, Long>> get_g_withSideEffectXm__marko_1_peter_4X_V_groupXmX_byXnameX_byXconstantX1X_sumX_capXmX() {
+            final Map<String, Long> map = new HashMap<>();
+            map.put("marko", 1l);
+            map.put("peter", 4l);
+            return g.withSideEffect("m", map).V().group("m").by("name").by(constant(1).sum()).cap("m");
         }
     }
 }

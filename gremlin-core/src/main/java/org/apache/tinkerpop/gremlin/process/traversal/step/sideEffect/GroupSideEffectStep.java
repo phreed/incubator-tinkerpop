@@ -72,7 +72,7 @@ public final class GroupSideEffectStep<S, K, V> extends SideEffectStep<S> implem
     public GroupSideEffectStep(final Traversal.Admin traversal, final String sideEffectKey) {
         super(traversal);
         this.sideEffectKey = sideEffectKey;
-        this.traversal.asAdmin().getSideEffects().registerSupplierIfAbsent(this.sideEffectKey, HashMapSupplier.instance());
+        this.traversal.getSideEffects().registerSupplierIfAbsent(this.sideEffectKey, HashMapSupplier.instance());
     }
 
     @Override
@@ -106,8 +106,22 @@ public final class GroupSideEffectStep<S, K, V> extends SideEffectStep<S> implem
         } else {                        // OLTP
             if (null == this.groupMap) {
                 final Object object = traverser.sideEffects(this.sideEffectKey);
-                if (!(object instanceof GroupStepHelper.GroupMap))
-                    traverser.sideEffects(this.sideEffectKey, this.groupMap = new GroupStepHelper.GroupMap<>((Map<K, V>) object));
+                if (!(object instanceof GroupStepHelper.GroupMap)) {
+                    final Map<K, V> providedMap = (Map<K, V>) object;
+                    traverser.sideEffects(this.sideEffectKey, this.groupMap = new GroupStepHelper.GroupMap<>(providedMap));
+                    if (!providedMap.isEmpty()) {
+                        for (final K key : new ArrayList<>(providedMap.keySet())) {
+                            final Traversal.Admin<S, V> vrTraversal = this.valueReduceTraversal.clone();
+                            this.groupMap.put(key, vrTraversal);
+                            this.counters.put(key, 0);
+                            final Step barrierStep = (Step) TraversalHelper.getFirstStepOfAssignableClass(Barrier.class, vrTraversal).orElseGet(null);
+                            if (null != barrierStep) {
+                                barrierStep.addStart(this.traversal.getTraverserGenerator().generate(providedMap.get(key), barrierStep, 1l));
+                                providedMap.remove(key);
+                            }
+                        }
+                    }
+                }
             }
             final K key = TraversalUtil.applyNullable(traverser, this.keyTraversal);
             Traversal.Admin<S, V> traversal = this.groupMap.get(key);
@@ -200,7 +214,7 @@ public final class GroupSideEffectStep<S, K, V> extends SideEffectStep<S> implem
             this.groupStepId = step.getId();
             this.sideEffectKey = step.getSideEffectKey();
             this.reduceTraversal = step.reduceTraversal.clone();
-            this.mapSupplier = step.getTraversal().asAdmin().getSideEffects().<Map<K, V>>getRegisteredSupplier(this.sideEffectKey).orElse(HashMapSupplier.instance());
+            this.mapSupplier = step.getTraversal().getSideEffects().<Map<K, V>>getRegisteredSupplier(this.sideEffectKey).orElse(HashMapSupplier.instance());
         }
 
         @Override
@@ -232,10 +246,10 @@ public final class GroupSideEffectStep<S, K, V> extends SideEffectStep<S> implem
 
         @Override
         public void reduce(final K key, final Iterator<Collection<?>> values, final ReduceEmitter<K, V> emitter) {
-            Traversal.Admin<?,V> reduceTraversalClone = this.reduceTraversal.clone();
+            Traversal.Admin<?, V> reduceTraversalClone = this.reduceTraversal.clone();
             while (values.hasNext()) {
                 final BulkSet<?> value = (BulkSet<?>) values.next();
-                value.forEach((v,bulk) -> reduceTraversalClone.addStart(reduceTraversalClone.getTraverserGenerator().generate(v, (Step) reduceTraversalClone.getStartStep(), bulk)));
+                value.forEach((v, bulk) -> reduceTraversalClone.addStart(reduceTraversalClone.getTraverserGenerator().generate(v, (Step) reduceTraversalClone.getStartStep(), bulk)));
                 TraversalHelper.getFirstStepOfAssignableClass(Barrier.class, reduceTraversalClone).ifPresent(Barrier::processAllStarts);
             }
             emitter.emit(key, reduceTraversalClone.next());

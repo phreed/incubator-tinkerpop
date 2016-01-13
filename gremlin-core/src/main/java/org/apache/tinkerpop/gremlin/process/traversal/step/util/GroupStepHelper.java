@@ -76,7 +76,6 @@ public final class GroupStepHelper {
         }
     }
 
-
     /////////
 
     public static class GroupMap<S, K, V> extends HashMap<K, Traversal.Admin<S, V>> implements FinalGet<Map<K, V>> {
@@ -89,7 +88,10 @@ public final class GroupStepHelper {
 
         @Override
         public Map<K, V> getFinal() {
-            this.forEach((key, traversal) -> this.map.put(key, traversal.next()));
+            for (final Map.Entry<K, Traversal.Admin<S, V>> entry : this.entrySet()) {
+                if (!this.map.containsKey(entry.getKey()))
+                    this.map.put(entry.getKey(), entry.getValue().next());
+            }
             return this.map;
         }
     }
