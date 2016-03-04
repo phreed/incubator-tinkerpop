@@ -105,6 +105,11 @@ public abstract class Client {
     public abstract Client alias(final String graphOrTraversalSource);
 
     /**
+     * Submit a {@link Traversal} to the server for remote execution.
+     */
+    public abstract ResultSet submit(final Traversal traversal);
+
+    /**
      * Initializes the client which typically means that a connection is established to the server.  Depending on the
      * implementation and configuration this blocking call may take some time.  This method will be called
      * automatically if it is not called directly and multiple calls will not have effect.
@@ -130,22 +135,6 @@ public abstract class Client {
      */
     public ResultSet submit(final String gremlin) {
         return submit(gremlin, null);
-    }
-
-    public ResultSet submit(final Traversal traversal) {
-        final byte[] serializedTraversal;
-        try {
-            serializedTraversal = Serializer.serializeObject(traversal);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-
-        try {
-            return submitAsync(RequestMessage.build(Tokens.OPS_TRAVERSE)
-                    .processor("traversal").addArg(Tokens.ARGS_GREMLIN, serializedTraversal).create()).get();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
     }
 
     /**
@@ -238,6 +227,11 @@ public abstract class Client {
 
         ClusteredClient(final Cluster cluster) {
             super(cluster);
+        }
+
+        @Override
+        public ResultSet submit(final Traversal traversal) {
+            throw new UnsupportedOperationException("This implementation does not support Traversal submission - use a sessionless Client created with from the alias() method");
         }
 
         /**
@@ -439,6 +433,23 @@ public abstract class Client {
         }
 
         @Override
+        public ResultSet submit(final Traversal traversal) {
+            final byte[] serializedTraversal;
+            try {
+                serializedTraversal = Serializer.serializeObject(traversal);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+
+            try {
+                return submitAsync(buildMessage(RequestMessage.build(Tokens.OPS_TRAVERSE)
+                        .processor("traversal").addArg(Tokens.ARGS_GREMLIN, serializedTraversal))).get();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
+        @Override
         public synchronized Client init() {
             if (close.isDone()) throw new IllegalStateException("Client is closed");
 
@@ -520,6 +531,11 @@ public abstract class Client {
 
         String getSessionId() {
             return sessionId;
+        }
+
+        @Override
+        public ResultSet submit(final Traversal traversal) {
+            throw new UnsupportedOperationException("This implementation does not support Traversal submission - use a sessionless Client created with from the alias() method");
         }
 
         /**
