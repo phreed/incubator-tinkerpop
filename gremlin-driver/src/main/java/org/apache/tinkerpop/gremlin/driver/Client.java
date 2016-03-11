@@ -253,6 +253,14 @@ public abstract class Client {
         return settings;
     }
 
+    /**
+     * Gets the {@link Cluster} that spawned this {@code Client}.
+     * @return
+     */
+    public Cluster getCluster() {
+        return cluster;
+    }
+
     protected Map<String,String> makeDefaultAliasMap(final String graphOrTraversalSource) {
         final Map<String,String> aliases = new HashMap<>();
         aliases.put("g", graphOrTraversalSource);
