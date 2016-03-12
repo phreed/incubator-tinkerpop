@@ -355,7 +355,7 @@ limitations under the License.
                                 <argLine>-Dlog4j.configuration=${log4j-test.properties} -Dhost=localhost -Dport=8182
                                     -Djub.consumers=CONSOLE,H2 -Djub.db.file=target/performance/h2/benchmarks
                                     -Djub.charts.dir=target/performance/charts -Djub.customkey=${project.parent.version}
-                                    -Dbuild.dir=${project.build.directory}
+                                    -Dbuild.dir=${project.build.directory} -Dis.testing=true
                                 </argLine>
                                 <summaryFile>target/failsafe-reports/failsafe-integration.xml</summaryFile>
                             </configuration>
